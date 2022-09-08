@@ -24,7 +24,7 @@
                 <TextBlock>Pokemons</TextBlock>
             </GroupBox.Header>
             <Grid>
-                <ListView ItemsSource="{Binding Pokemons}" DataContext="{Binding Pokemons}" >
+                <ListView ItemsSource="{Binding Pokemons}" >
                     <ListView.View>
                         <GridView AllowsColumnReorder="False" >
                             <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="70">
@@ -38,7 +38,7 @@
                     </ListView.View>
                 </ListView>
                 <StackPanel VerticalAlignment="Bottom" Margin="0, 20, 0, 0">
-                    <Button Click="AddRandomPokemon">Adicionar Pokemon</Button>
+                    <Button Command="{Binding AddRandomPokemonCommand}">Adicionar Pokemon</Button>
                 </StackPanel>
             </Grid>
         </GroupBox>

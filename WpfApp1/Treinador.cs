@@ -13,6 +13,7 @@ namespace WpfApp1
         private string name;
         private uint level;
         private List<Pokemon> pokemons;
+        public RelayCommand AddRandomPokemonCommand { get; private set; }
         // HTTP Client
         private static readonly HttpClient client = new HttpClient();
         public Treinador() { 
@@ -23,6 +24,7 @@ namespace WpfApp1
             pokemons = new List<Pokemon>();
             this.name = name;
             this.level = 0;
+            this.AddRandomPokemonCommand = new RelayCommand((object _) => this.AddRandomPokemon());
         }
         public Treinador(string name, uint level)
         {
@@ -48,6 +50,7 @@ namespace WpfApp1
             //here we request a random pokemon number between 0 and 150 
             pokemon.ApplyPokemonAPIInfo(random.Next(151).ToString());
         }
+
 
         public string Name { get { return name; } set { name = value; } }
         public uint Level { get { return level; } set { level = value; } }

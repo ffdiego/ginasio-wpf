@@ -28,10 +28,5 @@ namespace WpfApp1
         {
             DialogResult = true;
         }
-        public void AddRandomPokemon(object sender, RoutedEventArgs e)
-        {
-            
-
-        }
     }
 }
