@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace WpfApp1
@@ -11,6 +13,8 @@ namespace WpfApp1
         private string name;
         private uint level;
         private List<Pokemon> pokemons;
+        // HTTP Client
+        private static readonly HttpClient client = new HttpClient();
         public Treinador() { 
             pokemons = new List<Pokemon>();
         }
@@ -30,6 +34,19 @@ namespace WpfApp1
         public void AddPokemon(string name)
         {
             this.pokemons.Add(new Pokemon(name));
+        }
+        public void AddPokemon(Pokemon pokemon)
+        {
+            this.pokemons.Add(pokemon);
+        }
+        public void AddRandomPokemon()
+        {
+            Random random = new Random();
+            Pokemon pokemon = new Pokemon();
+            this.AddPokemon(pokemon);
+            //the api call takes a pokemon number as argument
+            //here we request a random pokemon number between 0 and 150 
+            pokemon.ApplyPokemonAPIInfo(random.Next(151).ToString());
         }
 
         public string Name { get { return name; } set { name = value; } }

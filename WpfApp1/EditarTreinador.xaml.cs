@@ -24,10 +24,14 @@ namespace WpfApp1
             InitializeComponent();
         }
 
-        public void Save_Btn(object sender, RoutedEventArgs e) 
+        public void SaveBtn(object sender, RoutedEventArgs e) 
         {
-            MessageBox.Show("Treinador Salvo!", "", MessageBoxButton.OK, MessageBoxImage.Information);
             DialogResult = true;
+        }
+        public void AddRandomPokemon(object sender, RoutedEventArgs e)
+        {
+            
+
         }
     }
 }

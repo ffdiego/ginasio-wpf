@@ -6,7 +6,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace WpfApp1
@@ -21,9 +24,6 @@ namespace WpfApp1
         public RelayCommand Edit { get; private set; }
         public RelayCommand Remove { get; private set; }
         public RelayCommand Puxar { get; private set; }
-
-        // HTTP Client
-        private static readonly HttpClient client = new HttpClient();
 
         private EditarTreinador tela;
 
@@ -49,6 +49,7 @@ namespace WpfApp1
                 if (tela.DialogResult == true)
                 {
                     listaDeTreinadores.Add(treinador);
+                    MessageBox.Show("Treinador Salvo!", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             });
             Edit = new RelayCommand((object _) => {
@@ -59,10 +60,6 @@ namespace WpfApp1
             });
             Remove = new RelayCommand((object _) => {
                 listaDeTreinadores.Remove(TreinadorSelecionado);
-            });
-            Puxar = new RelayCommand(async (object _) =>
-            {
-                await ProcessRepositories();
             });
         }
 
@@ -86,22 +83,15 @@ namespace WpfApp1
             get { return pokemonSelecionado; }
             set
             {
+                if (value == null) return;
                 pokemonSelecionado = value;
                 Console.WriteLine("Troquei para o pokemon: " + value.Name);
-                OnPropertyChanged("pokemonSelecionado");
+                if(value.SpriteFront == null)
+                {
+                    pokemonSelecionado.ApplyPokemonAPIInfo(value.Name);
+                }
+                OnPropertyChanged();
             }
-        }
-
-        private static async Task ProcessRepositories()
-        {
-            
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-            var stringTask = client.GetStringAsync("https://pokeapi.co/api/v2/pokemon/ditto");
-            var msg = await stringTask;
-            Console.Write(msg);
-        }
+        }  
     }
 }

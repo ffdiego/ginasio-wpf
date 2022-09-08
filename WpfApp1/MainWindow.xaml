@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Centro de Controle do Ginásio" Height="450" Width="938" ResizeMode="CanMinimize">
     <Grid>
-        <GroupBox Width="200" Margin="10,10,728,10" Padding="5" >
+        <GroupBox Margin="10,10,738,10" Padding="5" >
             <GroupBox.Header>
                 <TextBlock>Comandos</TextBlock>
             </GroupBox.Header>
@@ -22,7 +22,6 @@
                 <Button Command="{Binding Add}">Adicionar</Button>
                 <Button Command="{Binding Edit}">Editar</Button>
                 <Button Command="{Binding Remove}">Apagar</Button>
-                <Button Command="{Binding Puxar}">API</Button>
             </StackPanel>
         </GroupBox>
         <GroupBox Padding="10" Margin="215,10,523,10">
@@ -32,7 +31,25 @@
             <ListView ItemsSource="{Binding listaDeTreinadores}" SelectedItem="{Binding TreinadorSelecionado}">
                 <ListView.View>
                     <GridView AllowsColumnReorder="False" >
-                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="90">
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="70">
+                            <GridViewColumn.Header>Nome</GridViewColumn.Header>
+                        </GridViewColumn>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Pokemons.Count}" Width="70">
+                            <GridViewColumn.Header>Quantidade</GridViewColumn.Header>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+        <GroupBox Width="200" Padding="10" Margin="427,10,311,10">
+            <GroupBox.Header>
+                <TextBlock>Pokemons</TextBlock>
+            </GroupBox.Header>
+            <ListView ItemsSource="{Binding TreinadorSelecionado.Pokemons}" SelectedItem="{Binding PokemonSelecionado}" >
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False" >
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="70">
                             <GridViewColumn.Header>Nome</GridViewColumn.Header>
                         </GridViewColumn>
 
@@ -43,23 +60,41 @@
                 </ListView.View>
             </ListView>
         </GroupBox>
-        <GroupBox Width="200" Padding="10" Margin="420,10,318,10">
-            <GroupBox.Header>
-                <TextBlock>Pokemons</TextBlock>
-            </GroupBox.Header>
-            <ListView ItemsSource="{Binding TreinadorSelecionado.Pokemons}" SelectedItem="{Binding PokemonSelecionado}" >
-                <ListView.View>
-                    <GridView AllowsColumnReorder="False" >
-                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="90">
-                            <GridViewColumn.Header>Nome</GridViewColumn.Header>
-                        </GridViewColumn>
 
-                        <GridViewColumn DisplayMemberBinding="{Binding Level}" Width="70">
-                            <GridViewColumn.Header>Nível</GridViewColumn.Header>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+        <GroupBox Padding="10" Margin="642,10,0,10" DataContext="{Binding PokemonSelecionado}">
+            <GroupBox.Header>
+                <TextBlock>Detalhes</TextBlock>
+            </GroupBox.Header>
+            <StackPanel>
+                <TabControl Height="200" Width="200">
+                    <TabItem Header="Frente">
+                        <Image Source="{Binding SpriteFront}" RenderOptions.BitmapScalingMode="NearestNeighbor" >
+                            <Image.Effect>
+                                <DropShadowEffect/>
+                            </Image.Effect>
+                        </Image>
+                    </TabItem>
+                    <TabItem Header="Costas">
+                        <Image Source="{Binding SpriteBack}" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderTransformOrigin="0.5,0.5" >
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="-1"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                            <Image.Effect>
+                                <DropShadowEffect/>
+                            </Image.Effect>
+                        </Image>
+                    </TabItem>
+                </TabControl>
+                <TextBlock>Nome:</TextBlock>
+                <TextBox Text="{Binding Name}" Height="25" IsReadOnly="True" VerticalContentAlignment="Center" />
+                <TextBlock>Tipo:</TextBlock>
+                <TextBox Text="{Binding Type}" Height="25" IsReadOnly="True" VerticalContentAlignment="Center" />
+            </StackPanel>
         </GroupBox>
     </Grid>
 </Window>
