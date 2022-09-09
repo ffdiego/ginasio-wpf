@@ -103,6 +103,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="PokeApi.cs" />
     <Compile Include="EditarTreinador.xaml.cs">
       <DependentUpon>EditarTreinador.xaml</DependentUpon>
     </Compile>

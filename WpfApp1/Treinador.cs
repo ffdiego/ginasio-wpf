@@ -13,8 +13,6 @@ namespace WpfApp1
         private string name;
         private List<Pokemon> pokemons;
         public RelayCommand AddRandomPokemonCommand { get; private set; }
-        // HTTP Client
-        private static readonly HttpClient client = new HttpClient();
         public Treinador() { 
             pokemons = new List<Pokemon>();
             InitializeCommands();
@@ -47,7 +45,7 @@ namespace WpfApp1
             this.AddPokemon(pokemon);
             //the api call takes a pokemon number as argument
             //here we request a random pokemon number between 0 and 150 
-            pokemon.ApplyPokemonAPIInfo(random.Next(151).ToString());
+            PokeApi.ApplyPokemonAPIInfo(random.Next(151).ToString(), pokemon);
         }
         public void Set(Treinador treinador)
         {

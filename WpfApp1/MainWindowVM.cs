@@ -97,7 +97,7 @@ namespace WpfApp1
                 Console.WriteLine("Troquei para o pokemon: " + value.Name);
                 if(value.SpriteFront == null)
                 {
-                    pokemonSelecionado.ApplyPokemonAPIInfo(value.Name);
+                    PokeApi.ApplyPokemonAPIInfo(value.Name, pokemonSelecionado);
                 }
                 OnPropertyChanged();
             }
