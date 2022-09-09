@@ -11,26 +11,25 @@ namespace WpfApp1
     public class Treinador
     {
         private string name;
-        private uint level;
         private List<Pokemon> pokemons;
         public RelayCommand AddRandomPokemonCommand { get; private set; }
         // HTTP Client
         private static readonly HttpClient client = new HttpClient();
         public Treinador() { 
             pokemons = new List<Pokemon>();
+            InitializeCommands();
         }
-        public Treinador(string name)
+        public Treinador(Treinador treinador)
+        {
+            this.name = treinador.Name;
+            this.pokemons = treinador.pokemons;
+            InitializeCommands();
+        }
+        public Treinador(string name) 
         {
             pokemons = new List<Pokemon>();
             this.name = name;
-            this.level = 0;
-            this.AddRandomPokemonCommand = new RelayCommand((object _) => this.AddRandomPokemon());
-        }
-        public Treinador(string name, uint level)
-        {
-            pokemons = new List<Pokemon>();
-            this.name = name;
-            this.level = level;
+            InitializeCommands();
         }
 
         public void AddPokemon(string name)
@@ -50,10 +49,20 @@ namespace WpfApp1
             //here we request a random pokemon number between 0 and 150 
             pokemon.ApplyPokemonAPIInfo(random.Next(151).ToString());
         }
+        public void Set(Treinador treinador)
+        {
+            this.pokemons = treinador.pokemons;
+            this.name = treinador.Name;
+        }
 
-
+        private void InitializeCommands()
+        {
+            this.AddRandomPokemonCommand = new RelayCommand((object _) =>
+            {
+                this.AddRandomPokemon();
+            });
+        }
         public string Name { get { return name; } set { name = value; } }
-        public uint Level { get { return level; } set { level = value; } }
-        public List<Pokemon> Pokemons { get { return pokemons; } }
+        public List<Pokemon> Pokemons { get { return pokemons; } set { pokemons = value; } }
     }
 }

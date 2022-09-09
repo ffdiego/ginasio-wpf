@@ -10,13 +10,6 @@
         <StackPanel Margin="10" HorizontalAlignment="Left" Width="200">
             <TextBlock>Nome:</TextBlock>
             <TextBox Text="{Binding Name}" Height="25" VerticalContentAlignment="Center" />
-            <TextBlock>Nível:</TextBlock>
-            <ComboBox Height="25" SelectedIndex="{Binding Level}">
-                <ComboBoxItem>0</ComboBoxItem>
-                <ComboBoxItem>1</ComboBoxItem>
-                <ComboBoxItem>2</ComboBoxItem>
-                <ComboBoxItem>3</ComboBoxItem>
-            </ComboBox>
             <Button Click="SaveBtn" Margin="10, 20, 10, 0" Height="25">Salvar</Button>
         </StackPanel>
         <GroupBox Width="200" Padding="10" Margin="228,0,10,10">

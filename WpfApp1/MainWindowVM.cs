@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -53,10 +54,18 @@ namespace WpfApp1
                 }
             });
             Edit = new RelayCommand((object _) => {
+                //  todo: resolver cópia superficial
                 tela = new EditarTreinador();
-                tela.DataContext = TreinadorSelecionado;
+                Treinador treinador = new Treinador(TreinadorSelecionado);
+                tela.DataContext = treinador;
                 tela.Title = "Editar Treinador";
                 tela.ShowDialog();
+                if(tela.DialogResult == true)
+                {
+                    this.treinadorSelecionado.Set(treinador);
+                    MessageBox.Show("Informações Atualizadas!", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                    OnPropertyChanged("listaDeTreinadores");
+                }
             });
             Remove = new RelayCommand((object _) => {
                 listaDeTreinadores.Remove(TreinadorSelecionado);

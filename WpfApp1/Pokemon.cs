@@ -48,6 +48,7 @@ namespace WpfApp1
                 this.Type = pokemonDetails.GetProperty("types")[0].GetProperty("type").GetProperty("name").ToString();
                 this.SpriteFront = sprites.GetProperty("front_default").ToString();
                 this.SpriteBack = sprites.GetProperty("back_default").ToString();
+                Console.WriteLine("Dados Obtidos!");
             }
             else
             {
