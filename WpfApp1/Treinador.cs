@@ -5,27 +5,32 @@ using System.Text;
 using System.Text.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Collections.ObjectModel;
 
 namespace WpfApp1
 {
-    public class Treinador
+    public class Treinador : INotifyPropertyChanged
     {
+
         private string name;
-        private List<Pokemon> pokemons;
+        private ObservableCollection<Pokemon> pokemons;
+        public event PropertyChangedEventHandler PropertyChanged;
         public RelayCommand AddRandomPokemonCommand { get; private set; }
         public Treinador() { 
-            pokemons = new List<Pokemon>();
+            pokemons = new ObservableCollection<Pokemon>();
             InitializeCommands();
         }
         public Treinador(Treinador treinador)
         {
             this.name = treinador.Name;
-            this.pokemons = treinador.pokemons;
+            this.pokemons = new ObservableCollection<Pokemon>(treinador.pokemons);
             InitializeCommands();
         }
         public Treinador(string name) 
         {
-            pokemons = new List<Pokemon>();
+            pokemons = new ObservableCollection<Pokemon>();
             this.name = name;
             InitializeCommands();
         }
@@ -47,10 +52,11 @@ namespace WpfApp1
             //here we request a random pokemon number between 0 and 150 
             PokeApi.ApplyPokemonAPIInfo(random.Next(151).ToString(), pokemon);
         }
-        public void Set(Treinador treinador)
+        public void CopyFrom(Treinador treinador)
         {
             this.pokemons = treinador.pokemons;
             this.name = treinador.Name;
+            Notify("Name");
         }
 
         private void InitializeCommands()
@@ -60,7 +66,11 @@ namespace WpfApp1
                 this.AddRandomPokemon();
             });
         }
+        private void Notify([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
         public string Name { get { return name; } set { name = value; } }
-        public List<Pokemon> Pokemons { get { return pokemons; } set { pokemons = value; } }
+        public ObservableCollection<Pokemon> Pokemons { get { return pokemons; } set { pokemons = value; } }
     }
 }

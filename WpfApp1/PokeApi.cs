@@ -16,12 +16,12 @@ namespace WpfApp1
         {
             Console.WriteLine("Tentando conectar!");
 
-            // Header
+            // HeaderConfig
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-            // EndHeader
+            // HeaderConfig
 
             var response = await client.GetAsync("https://pokeapi.co/api/v2/pokemon/" + pokemonName.ToLower());
             if (response.IsSuccessStatusCode)
@@ -32,11 +32,8 @@ namespace WpfApp1
 
                 JsonElement sprites = pokemonDetails.GetProperty("sprites").GetProperty("versions").GetProperty("generation-v").GetProperty("black-white").GetProperty("animated");
 
-                // Uppercases the first letter
-                target.Name = pokemonDetails.GetProperty("name").ToString();
-                target.Name = Char.ToUpper(target.Name[0]) + target.Name.Substring(1);
-
-                target.Type = pokemonDetails.GetProperty("types")[0].GetProperty("type").GetProperty("name").ToString();
+                target.Name = Capitalize(pokemonDetails.GetProperty("name").ToString());
+                target.Type = Capitalize(pokemonDetails.GetProperty("types")[0].GetProperty("type").GetProperty("name").ToString());
                 target.SpriteFront = sprites.GetProperty("front_default").ToString();
                 target.SpriteBack = sprites.GetProperty("back_default").ToString();
                 Console.WriteLine("Dados Obtidos!");
@@ -49,6 +46,11 @@ namespace WpfApp1
                 target.Type = "";
             }
 
+        }
+
+        private static string Capitalize(string text)
+        {
+            return Char.ToUpper(text[0]) + text.Substring(1);
         }
     }
 }

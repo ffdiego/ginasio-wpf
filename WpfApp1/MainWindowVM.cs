@@ -27,7 +27,6 @@ namespace WpfApp1
         public RelayCommand Puxar { get; private set; }
 
         private EditarTreinador tela;
-
         public MainWindowVM()
         {
             listaDeTreinadores = new ObservableCollection<Treinador>();
@@ -62,9 +61,9 @@ namespace WpfApp1
                 tela.ShowDialog();
                 if(tela.DialogResult == true)
                 {
-                    this.treinadorSelecionado.Set(treinador);
+                    this.treinadorSelecionado.CopyFrom(treinador);
                     MessageBox.Show("Informações Atualizadas!", "", MessageBoxButton.OK, MessageBoxImage.Information);
-                    OnPropertyChanged("listaDeTreinadores");
+                    Notify("PokemonSelecionado");
                 }
             });
             Remove = new RelayCommand((object _) => {
@@ -74,7 +73,7 @@ namespace WpfApp1
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string name = null)
+        private void Notify([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
@@ -84,7 +83,7 @@ namespace WpfApp1
             set
             {
                 treinadorSelecionado = value;
-                OnPropertyChanged();
+                Notify();
             }
         }
         public Pokemon PokemonSelecionado
@@ -99,7 +98,7 @@ namespace WpfApp1
                 {
                     PokeApi.ApplyPokemonAPIInfo(value.Name, pokemonSelecionado);
                 }
-                OnPropertyChanged();
+                Notify();
             }
         }  
     }
