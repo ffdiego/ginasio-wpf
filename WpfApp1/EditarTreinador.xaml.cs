@@ -19,6 +19,8 @@ namespace WpfApp1
     /// </summary>
     public partial class EditarTreinador : Window
     {
+        private AdicionarPokemon tela;
+        public Treinador Treinador;
         public EditarTreinador()
         {
             InitializeComponent();
@@ -27,6 +29,15 @@ namespace WpfApp1
         public void SaveBtn(object sender, RoutedEventArgs e) 
         {
             DialogResult = true;
+        }
+        public void AddPkmnBtn(object sender, RoutedEventArgs e)
+        {
+            tela = new AdicionarPokemon();
+            tela.Show();
+            if(tela.DialogResult == true)
+            {
+                this.
+            }
         }
     }
 }

@@ -19,6 +19,12 @@ namespace WpfApp1
             this.name = name;
             this.level = 0;
         }
+
+        public void FetchAPIData()
+        {
+            PokeApi.ApplyPokemonAPIInfo(this.name, this);
+        }
+
         private void Notify([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

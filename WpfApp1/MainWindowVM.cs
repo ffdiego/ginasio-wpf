@@ -24,7 +24,7 @@ namespace WpfApp1
         public RelayCommand Add { get; private set; }
         public RelayCommand Edit { get; private set; }
         public RelayCommand Remove { get; private set; }
-        public RelayCommand Puxar { get; private set; }
+        public RelayCommand NewPokemon { get; private set; }
 
         private EditarTreinador tela;
         public MainWindowVM()

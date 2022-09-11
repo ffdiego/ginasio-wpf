@@ -94,8 +94,8 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WpfAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc, processorArchitecture=MSIL">
-      <HintPath>..\packages\WpfAnimatedGif.2.0.2\lib\net40\WpfAnimatedGif.dll</HintPath>
+    <Reference Include="XamlAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=20a987d8023d9690, processorArchitecture=MSIL">
+      <HintPath>..\packages\XamlAnimatedGif.2.0.2\lib\net45\XamlAnimatedGif.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +103,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdicionarPokemon.xaml.cs">
+      <DependentUpon>AdicionarPokemon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PokeApi.cs" />
     <Compile Include="EditarTreinador.xaml.cs">
       <DependentUpon>EditarTreinador.xaml</DependentUpon>
@@ -110,6 +113,10 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="Pokemon.cs" />
     <Compile Include="Treinador.cs" />
+    <Page Include="AdicionarPokemon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditarTreinador.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

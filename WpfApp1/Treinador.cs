@@ -57,11 +57,12 @@ namespace WpfApp1
             this.pokemons = treinador.pokemons;
             this.name = treinador.Name;
             Notify("Name");
+            Notify("Pokemons");
         }
 
         private void InitializeCommands()
         {
-            this.AddRandomPokemonCommand = new RelayCommand((object _) =>
+            AddRandomPokemonCommand = new RelayCommand((object _) =>
             {
                 this.AddRandomPokemon();
             });

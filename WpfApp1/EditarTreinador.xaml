@@ -31,7 +31,8 @@
                     </ListView.View>
                 </ListView>
                 <StackPanel VerticalAlignment="Bottom" Margin="0, 20, 0, 0">
-                    <Button Command="{Binding AddRandomPokemonCommand}">Adicionar Pokemon</Button>
+                    <Button>Remover Pokemon</Button>
+                    <Button Click="AddPkmnBtn" Height="30">Adicionar Pokemon</Button>
                 </StackPanel>
             </Grid>
         </GroupBox>
