@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="Centro de Controle do Ginásio" Height="450" Width="938" ResizeMode="CanMinimize">
+        Title="Centro de Controle do Ginásio" Height="450" Width="938" ResizeMode="CanMinimize"
+        xmlns:gif ="https://github.com/XamlAnimatedGif/XamlAnimatedGif">
     <Grid>
         <GroupBox Margin="10,10,738,10" Padding="5" >
             <GroupBox.Header>
@@ -68,14 +69,14 @@
             <StackPanel>
                 <TabControl Height="200" Width="200">
                     <TabItem Header="Frente">
-                        <Image Source="{Binding SpriteFront}" RenderOptions.BitmapScalingMode="NearestNeighbor" >
+                        <Image Source="{Binding SpriteFront}" gif:AnimationBehavior.SourceUri="{Binding SpriteFront}"  RenderOptions.BitmapScalingMode="NearestNeighbor" >
                             <Image.Effect>
                                 <DropShadowEffect/>
                             </Image.Effect>
                         </Image>
                     </TabItem>
                     <TabItem Header="Costas">
-                        <Image Source="{Binding SpriteBack}" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderTransformOrigin="0.5,0.5" >
+                        <Image Source="{Binding SpriteBack}" gif:AnimationBehavior.SourceUri="{Binding SpriteBack}" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderTransformOrigin="0.5,0.5" >
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform ScaleX="-1"/>
