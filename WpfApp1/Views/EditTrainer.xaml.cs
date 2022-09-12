@@ -15,13 +15,11 @@ using System.Windows.Shapes;
 namespace WpfApp1
 {
     /// <summary>
-    /// Lógica interna para EditarTreinador.xaml
+    /// Lógica interna para EditTrainer.xaml
     /// </summary>
-    public partial class EditarTreinador : Window
+    public partial class EditTrainer : Window
     {
-        private AdicionarPokemon tela;
-        public Treinador Treinador;
-        public EditarTreinador()
+        public EditTrainer()
         {
             InitializeComponent();
         }
@@ -29,15 +27,6 @@ namespace WpfApp1
         public void SaveBtn(object sender, RoutedEventArgs e) 
         {
             DialogResult = true;
-        }
-        public void AddPkmnBtn(object sender, RoutedEventArgs e)
-        {
-            tela = new AdicionarPokemon();
-            tela.Show();
-            if(tela.DialogResult == true)
-            {
-                this.
-            }
         }
     }
 }

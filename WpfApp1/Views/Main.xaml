@@ -29,7 +29,7 @@
             <GroupBox.Header>
                 <TextBlock>Treinadores</TextBlock>
             </GroupBox.Header>
-            <ListView ItemsSource="{Binding listaDeTreinadores}" SelectedItem="{Binding TreinadorSelecionado}">
+            <ListView ItemsSource="{Binding trainers}" SelectedItem="{Binding HighlightedTrainer}">
                 <ListView.View>
                     <GridView AllowsColumnReorder="False" >
                         <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="70">
@@ -47,22 +47,22 @@
             <GroupBox.Header>
                 <TextBlock>Pokemons</TextBlock>
             </GroupBox.Header>
-            <ListView ItemsSource="{Binding TreinadorSelecionado.Pokemons}" SelectedItem="{Binding PokemonSelecionado}" >
+            <ListView ItemsSource="{Binding HighlightedTrainer.Pokemons}" SelectedItem="{Binding HighlightedPokemon}" >
                 <ListView.View>
                     <GridView AllowsColumnReorder="False" >
-                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="70">
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="100">
                             <GridViewColumn.Header>Nome</GridViewColumn.Header>
                         </GridViewColumn>
 
-                        <GridViewColumn DisplayMemberBinding="{Binding Level}" Width="70">
-                            <GridViewColumn.Header>Nível</GridViewColumn.Header>
+                        <GridViewColumn DisplayMemberBinding="{Binding Type}" Width="50">
+                            <GridViewColumn.Header>Tipo</GridViewColumn.Header>
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
         </GroupBox>
 
-        <GroupBox Padding="10" Margin="642,10,0,10" DataContext="{Binding PokemonSelecionado}">
+        <GroupBox Padding="10" Margin="642,10,0,10" DataContext="{Binding HighlightedPokemon}">
             <GroupBox.Header>
                 <TextBlock>Detalhes</TextBlock>
             </GroupBox.Header>

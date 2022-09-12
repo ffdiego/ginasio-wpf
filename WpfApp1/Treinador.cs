@@ -50,7 +50,7 @@ namespace WpfApp1
             this.AddPokemon(pokemon);
             //the api call takes a pokemon number as argument
             //here we request a random pokemon number between 0 and 150 
-            PokeApi.ApplyPokemonAPIInfo(random.Next(151).ToString(), pokemon);
+            _ = PokeApi.ApplyPokemonAPIInfo(random.Next(151).ToString(), pokemon);
         }
         public void CopyFrom(Treinador treinador)
         {

@@ -40,7 +40,7 @@ namespace WpfApp1
             }
             else
             {
-                Console.WriteLine("Pokemon não encontrado!");
+                Console.WriteLine("HighlightedPokemon não encontrado!");
                 target.SpriteFront = "";
                 target.SpriteBack = "";
                 target.Type = "";
