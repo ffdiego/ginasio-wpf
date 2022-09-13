@@ -13,7 +13,7 @@ namespace WpfApp1.ViewModels
     {
         private EditPokemon screen;
         private Pokemon source, editPokemon;
-        private Treinador owner;
+        private Trainer owner;
         public string Name { get; set; }
         public string ErrorMSG { get; private set; }
         public RelayCommand Fetch { get; private set; }
@@ -24,13 +24,13 @@ namespace WpfApp1.ViewModels
         {
             
         }
-        public VMEditPokemon(Treinador treinador)
+        public VMEditPokemon(Trainer treinador)
         {
             owner = treinador;
             this.editPokemon = new Pokemon();
             DisplayScreen();
         }
-        public VMEditPokemon(Treinador treinador, Pokemon pokemon)
+        public VMEditPokemon(Trainer treinador, Pokemon pokemon)
         {
             owner = treinador;
             source = pokemon;

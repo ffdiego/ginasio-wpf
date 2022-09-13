@@ -2,15 +2,17 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using WpfApp1.Db;
 using WpfApp1.ViewModels;
 
 namespace WpfApp1
 {
     public class VMMain : INotifyPropertyChanged
     {
-        public ObservableCollection<Treinador> trainers { get; set; }
-        private Treinador highlightedTrainer;
+        public ObservableCollection<Trainer> trainers { get; set; }
+        private Trainer highlightedTrainer;
         public Pokemon highlightedPokemon;
+        private DbManager db;
         // Relay Commands
         public RelayCommand Add { get; private set; }
         public RelayCommand Edit { get; private set; }
@@ -18,19 +20,24 @@ namespace WpfApp1
         public RelayCommand NewPokemon { get; private set; }
         public VMMain()
         {
-            trainers = new ObservableCollection<Treinador>
+            /* old Testing
+            trainers = new ObservableCollection<Trainer>
             {
-                new Treinador("Marcos"),
-                new Treinador("Letícia")
+                new Trainer("Marcos"),
+                new Trainer("Letícia")
             };
+            
             trainers[0].AddPokemon("Bulbasaur");
             trainers[0].AddPokemon("Pikachu");
             trainers[0].AddPokemon("Voltorb");
             trainers[1].AddPokemon("Cubone");
             trainers[1].AddPokemon("Magnemite");
+            */
 
             Console.WriteLine("Iniciando tudo!");
             IniciaComandos();
+            db = new DbManager(Type.PostGRES);
+            trainers = new ObservableCollection<Trainer>(db.GetAllTrainers());
         }
         public void IniciaComandos()
         {
@@ -51,7 +58,7 @@ namespace WpfApp1
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-        public Treinador HighlightedTrainer
+        public Trainer HighlightedTrainer
         {
             get { return highlightedTrainer; }
             set

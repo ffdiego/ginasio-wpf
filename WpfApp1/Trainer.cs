@@ -11,24 +11,24 @@ using System.Collections.ObjectModel;
 
 namespace WpfApp1
 {
-    public class Treinador : INotifyPropertyChanged
+    public class Trainer : INotifyPropertyChanged
     {
 
         private string name;
         private ObservableCollection<Pokemon> pokemons;
         public event PropertyChangedEventHandler PropertyChanged;
         public RelayCommand AddRandomPokemonCommand { get; private set; }
-        public Treinador() { 
+        public Trainer() { 
             pokemons = new ObservableCollection<Pokemon>();
             InitializeCommands();
         }
-        public Treinador(Treinador treinador)
+        public Trainer(Trainer treinador)
         {
             this.name = treinador.Name;
             this.pokemons = new ObservableCollection<Pokemon>(treinador.pokemons);
             InitializeCommands();
         }
-        public Treinador(string name) 
+        public Trainer(string name) 
         {
             pokemons = new ObservableCollection<Pokemon>();
             this.name = name;
@@ -52,7 +52,7 @@ namespace WpfApp1
             //here we request a random pokemon number between 0 and 150 
             _ = PokeApi.ApplyPokemonAPIInfo(random.Next(151).ToString(), pokemon);
         }
-        public void CopyFrom(Treinador treinador)
+        public void CopyFrom(Trainer treinador)
         {
             this.pokemons = treinador.pokemons;
             this.name = treinador.Name;

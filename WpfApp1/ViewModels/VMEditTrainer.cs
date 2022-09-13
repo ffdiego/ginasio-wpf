@@ -9,8 +9,8 @@ namespace WpfApp1.ViewModels
 {
     public class VMEditTrainer
     {
-        private ObservableCollection<Treinador> trainers;
-        private Treinador source, editTrainer;
+        private ObservableCollection<Trainer> trainers;
+        private Trainer source, editTrainer;
         public Pokemon HighlightedPokemon {get; set; }
         private EditTrainer screen;
         public RelayCommand AddPokemon { get; private set; }
@@ -18,17 +18,17 @@ namespace WpfApp1.ViewModels
         private VMEditTrainer()
         {
         }
-        public VMEditTrainer(ObservableCollection<Treinador> list)
+        public VMEditTrainer(ObservableCollection<Trainer> list)
         {
             trainers = list;
-            editTrainer = new Treinador();
+            editTrainer = new Trainer();
             DisplayScreen();
         }
-        public VMEditTrainer(ObservableCollection<Treinador> list, Treinador treinador)
+        public VMEditTrainer(ObservableCollection<Trainer> list, Trainer treinador)
         {
             trainers = list;
             source = treinador;
-            editTrainer = new Treinador(treinador);
+            editTrainer = new Trainer(treinador);
             DisplayScreen();
         }
 
@@ -64,6 +64,6 @@ namespace WpfApp1.ViewModels
             }, (object _) => HighlightedPokemon != null);
 
         }
-        public Treinador Treinador { get { return editTrainer; } set { editTrainer = value; } }
+        public Trainer Treinador { get { return editTrainer; } set { editTrainer = value; } }
     }
 }
