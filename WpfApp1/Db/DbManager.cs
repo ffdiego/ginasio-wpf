@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,14 @@ namespace WpfApp1.Db
             return this.db.GetAllTrainers();
         }
 
+        public void AddTrainer(Trainer trainer)
+        {
+            this.db.InsertTrainer(trainer);
+        }
+        public void RemoveTrainer(Trainer trainer)
+        {
+            this.db.RemoveTrainer(trainer);
+        }
     }
 }
 

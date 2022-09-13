@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,8 +13,6 @@ namespace WpfApp1
     public class PGSQLdb : IDatabase
     {
         private readonly string connectionString = "Host=127.0.0.1;Username=postgres;Password=docker";
-        private NpgsqlCommand cmd;
-        private NpgsqlDataReader reader;
         private NpgsqlConnection connection;
         public PGSQLdb()
         {
@@ -22,26 +21,60 @@ namespace WpfApp1
 
         public List<Trainer> GetAllTrainers()
         {
-            List<Trainer> trainers = new List<Trainer>();
-            Connect();
-            cmd = new NpgsqlCommand("SELECT * FROM ginasio", connection);
-            reader = cmd.ExecuteReader();
-            while (reader.Read())
+            List<Trainer> trainers = _getTrainers();
+            foreach (Trainer trainer in trainers)
             {
-                trainers.Add(new Trainer(reader.GetString(2)));
+                _getPokemonsOf(trainer);
             }
-            Disconnect();
             return trainers;
         }
 
-        public void InsertPokemon(Pokemon pokemon)
+        public void InsertPokemon(Trainer trainer, Pokemon pokemon)
         {
-            throw new NotImplementedException();
+            Connect();
+            NpgsqlCommand cmd;
+            NpgsqlDataReader reader;
+            try
+            {
+                //todo:
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                throw;
+            }
+            finally
+            {
+                //cmd?.Dispose();
+                //reader?.Dispose();
+            }
+            Disconnect();
         }
 
         public void InsertTrainer(Trainer trainer)
         {
-            throw new NotImplementedException();
+            Connect();
+            NpgsqlCommand cmd;
+            NpgsqlDataReader reader;
+            try
+            {
+                cmd = new NpgsqlCommand("INSERT INTO ginasio(name) VALUES($1) RETURNING id", connection);
+                cmd.Parameters.AddWithValue(trainer.Name);
+                reader = cmd.ExecuteReader();
+                reader.Read();
+                trainer.Id = reader.GetInt16(0);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                throw;
+            }
+            finally
+            {
+                //cmd?.Dispose();
+                //reader?.Dispose();
+            }
+            Disconnect();
         }
 
         public void RemovePokemon(int id)
@@ -49,9 +82,27 @@ namespace WpfApp1
             throw new NotImplementedException();
         }
 
-        public void RemoveTrainer(int id)
+        public void RemoveTrainer(Trainer trainer)
         {
-            throw new NotImplementedException();
+            Connect();
+            NpgsqlCommand cmd;
+            try
+            {
+                cmd = new NpgsqlCommand("DELETE FROM ginasio WHERE id = $1", connection);
+                cmd.Parameters.AddWithValue(trainer.Id);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                throw;
+            }
+            finally
+            {
+                //cmd?.Dispose();
+                //reader?.Dispose();
+            }
+            Disconnect();
         }
 
         public void UpdatePokemon(int id, Pokemon pokemon)
@@ -62,6 +113,69 @@ namespace WpfApp1
         public void UpdateTrainer(int id, Trainer treinador)
         {
             throw new NotImplementedException();
+        }
+        //todo: resolver nomenclaturas
+        private List<Trainer> _getTrainers()
+        {
+            Connect();
+            NpgsqlCommand cmd;
+            NpgsqlDataReader reader;
+            List<Trainer> list = new List<Trainer>();
+            try
+            {
+                cmd = new NpgsqlCommand("SELECT * FROM ginasio", connection);
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Trainer trainer = new Trainer();
+                    trainer.Id = reader.GetInt32(0);
+                    trainer.Name = reader.GetString(1);
+                    list.Add(trainer);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                throw;
+            } finally
+            {
+                //cmd?.Dispose();
+                //reader?.Dispose();
+            }
+            Disconnect();
+            return list;
+        }
+
+        private void _getPokemonsOf(Trainer trainer)
+        {
+            Connect();
+            NpgsqlCommand cmd;
+            NpgsqlDataReader reader;
+            try
+            {
+                cmd = new NpgsqlCommand("SELECT name, type FROM pokemon p " +
+                                    "INNER JOIN trainers2pokemons t2p " +
+                                    "ON p.id = t2p.pokemon_id " +
+                                    "WHERE t2p.trainer_id = ($1)", connection);
+                cmd.Parameters.AddWithValue(trainer.Id);
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Pokemon p = new Pokemon(reader.GetString(0));
+                    trainer.AddPokemon(p);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                throw;
+            }
+            finally
+            {
+                //cmd?.Dispose();
+                //reader?.Dispose();
+                Disconnect();
+            }
         }
 
         private void Connect()
@@ -84,5 +198,6 @@ namespace WpfApp1
         {
             connection.Close();
         }
+
     }
 }

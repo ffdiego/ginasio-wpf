@@ -72,6 +72,7 @@ namespace WpfApp1
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         public string Name { get { return name; } set { name = value; } }
+        public int Id { get; set; }
         public ObservableCollection<Pokemon> Pokemons { get { return pokemons; } set { pokemons = value; } }
     }
 }

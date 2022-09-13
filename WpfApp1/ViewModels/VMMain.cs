@@ -38,6 +38,9 @@ namespace WpfApp1
             IniciaComandos();
             db = new DbManager(Type.PostGRES);
             trainers = new ObservableCollection<Trainer>(db.GetAllTrainers());
+            Trainer t = new Trainer("XXX");
+            db.AddTrainer(t);
+            db.RemoveTrainer(t);
         }
         public void IniciaComandos()
         {

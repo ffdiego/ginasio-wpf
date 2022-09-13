@@ -12,10 +12,10 @@ namespace WpfApp1
         List<Trainer> GetAllTrainers();
         void InsertTrainer(Trainer trainer);
         void UpdateTrainer(int id, Trainer treinador);
-        void RemoveTrainer(int id);
+        void RemoveTrainer(Trainer trainer);
 
         // Pokemon
-        void InsertPokemon(Pokemon pokemon);
+        void InsertPokemon(Trainer trainer, Pokemon pokemon);
         void UpdatePokemon(int id, Pokemon pokemon);
         void RemovePokemon(int id);
     }
