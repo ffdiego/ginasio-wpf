@@ -7,47 +7,64 @@ using System.Threading.Tasks;
 
 namespace WpfApp1.Db
 {
-    class DbManager
+    static class DBManager
     {
-        private Type type;
-        private IDatabase db;
+        static IDatabase db;
 
-        public DbManager()
+        static public void SetDB(DBType type)
         {
-
-        }
-        public DbManager(Type type)
-        {
-            this.type = type;
             switch (type)
             {
-                case Type.PostGRES:
-                    this.db = new PGSQLdb();
+                case DBType.PostGRES:
+                    db = new PGSQLdb();
                     break;
-                case Type.MariaDB:
+                case DBType.MariaDB:
                     break;
                 default:
                     break;
             }
         }
 
-        public List<Trainer> GetAllTrainers()
+        static public List<Trainer> GetAllTrainers()
         {
-            return this.db.GetAllTrainers();
+            try
+            {
+                return db.GetAllTrainers();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
-        public void AddTrainer(Trainer trainer)
+        static public void AddTrainer(Trainer trainer)
         {
-            this.db.InsertTrainer(trainer);
+            db.InsertTrainer(trainer);
         }
-        public void RemoveTrainer(Trainer trainer)
+        static public void RemoveTrainer(Trainer trainer)
         {
-            this.db.RemoveTrainer(trainer);
+            db.RemoveTrainer(trainer);
+        }
+        static public void AddPokemon(Trainer t, Pokemon p)
+        {
+            db.InsertPokemon(t, p);
+        }
+        static public void RemovePokemon(Trainer t, Pokemon p)
+        {
+            db.DetachPokemon(t, p);
+        }
+        static public void UpdatePokemon(Pokemon pokemon)
+        {
+            db.UpdatePokemon(pokemon);
+        }
+        static public void UpdateTrainer(Trainer trainer)
+        {
+            db.UpdateTrainer(trainer);
         }
     }
 }
 
-internal enum Type
+internal enum DBType
 {
     PostGRES,
     MariaDB
