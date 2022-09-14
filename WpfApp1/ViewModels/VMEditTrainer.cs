@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WpfApp1.Db;
 
 namespace WpfApp1.ViewModels
 {
@@ -42,10 +43,13 @@ namespace WpfApp1.ViewModels
             {
                 if (source != null) //I'm editing
                 {
+                    editTrainer.Id = source.Id;
+                    DBManager.UpdateTrainer(editTrainer);
                     source.CopyFrom(editTrainer);
                 }
                 else
                 {
+                    DBManager.AddTrainer(editTrainer);
                     trainers.Add(editTrainer);
                 }
             }
@@ -54,12 +58,11 @@ namespace WpfApp1.ViewModels
         {
             AddPokemon = new RelayCommand((object _) =>
             {
-                Console.Write("Apertaste!");
                 VMEditPokemon vm = new VMEditPokemon(Treinador);
             });
             RemovePokemon = new RelayCommand((object _) =>
             {
-                Console.Write("Apertaste!");
+                DBManager.RemovePokemon(Treinador, HighlightedPokemon);
                 Treinador.Pokemons.Remove(HighlightedPokemon);
             }, (object _) => HighlightedPokemon != null);
 

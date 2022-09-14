@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using WpfApp1.Db;
 using WpfApp1.ViewModels;
 
@@ -12,7 +13,6 @@ namespace WpfApp1
         public ObservableCollection<Trainer> trainers { get; set; }
         private Trainer highlightedTrainer;
         public Pokemon highlightedPokemon;
-        private DbManager db;
         // Relay Commands
         public RelayCommand Add { get; private set; }
         public RelayCommand Edit { get; private set; }
@@ -20,27 +20,17 @@ namespace WpfApp1
         public RelayCommand NewPokemon { get; private set; }
         public VMMain()
         {
-            /* old Testing
-            trainers = new ObservableCollection<Trainer>
-            {
-                new Trainer("Marcos"),
-                new Trainer("Letícia")
-            };
-            
-            trainers[0].AddPokemon("Bulbasaur");
-            trainers[0].AddPokemon("Pikachu");
-            trainers[0].AddPokemon("Voltorb");
-            trainers[1].AddPokemon("Cubone");
-            trainers[1].AddPokemon("Magnemite");
-            */
-
             Console.WriteLine("Iniciando tudo!");
             IniciaComandos();
-            db = new DbManager(Type.PostGRES);
-            trainers = new ObservableCollection<Trainer>(db.GetAllTrainers());
-            Trainer t = new Trainer("XXX");
-            db.AddTrainer(t);
-            db.RemoveTrainer(t);
+            DBManager.SetDB(DBType.PostGRES);
+            try
+            {
+                trainers = new ObservableCollection<Trainer>(DBManager.GetAllTrainers());
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
         public void IniciaComandos()
         {
@@ -51,6 +41,7 @@ namespace WpfApp1
                 VMEditTrainer vm = new VMEditTrainer(trainers, highlightedTrainer);
             }, (object _) => this.highlightedTrainer != null);
             Remove = new RelayCommand((object _) => {
+                DBManager.RemoveTrainer(HighlightedTrainer);
                 trainers.Remove(highlightedTrainer);
             }, (object _) => this.highlightedTrainer != null);
         }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using WpfApp1.Db;
 using WpfApp1.Views;
 
 namespace WpfApp1.ViewModels
@@ -45,12 +46,14 @@ namespace WpfApp1.ViewModels
             screen.ShowDialog();
             if (screen.DialogResult == true)
             {
-                Console.WriteLine("Retornei true!");
                 if(this.source != null)
                 {
+                    editPokemon.Id = source.Id;
+                    DBManager.UpdatePokemon(editPokemon);
                     this.source.CopyFrom(editPokemon);
                 } else
                 {
+                    DBManager.AddPokemon(owner, editPokemon);
                     owner.AddPokemon(EditPokemon);
                 }
             }
