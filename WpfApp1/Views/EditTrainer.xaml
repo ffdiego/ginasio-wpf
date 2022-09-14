@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="Treinador" Height="358" Width="460">
+        Title="Treinador" Height="358" Width="460" ResizeMode="CanMinimize">
     <Grid>
         <StackPanel Margin="10" HorizontalAlignment="Left" Width="200">
             <TextBlock>Nome:</TextBlock>

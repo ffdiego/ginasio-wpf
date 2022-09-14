@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text.Json;
 using System.Runtime.CompilerServices;
+using WpfApp1.Db;
 
 namespace WpfApp1
 {

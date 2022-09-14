@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1.Views"
         mc:Ignorable="d"
-        Title="EditPokemon" Height="300" Width="450">
+        Title="EditPokemon" Height="300" Width="450" ResizeMode="CanMinimize">
     <StackPanel Margin="10" Orientation="Horizontal">
         <StackPanel Width="200" Margin="0,0,10,0">
 

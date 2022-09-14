@@ -18,23 +18,18 @@ namespace WpfApp1
         private ObservableCollection<Pokemon> pokemons;
         public event PropertyChangedEventHandler PropertyChanged;
         public RelayCommand AddRandomPokemonCommand { get; private set; }
+        public string Name { get { return name; } set { name = value; } }
+        public int Id { get; set; }
+        public ObservableCollection<Pokemon> Pokemons { get { return pokemons; } set { pokemons = value; } }
         public Trainer() { 
             pokemons = new ObservableCollection<Pokemon>();
-            InitializeCommands();
         }
         public Trainer(Trainer treinador)
         {
-            this.name = treinador.Name;
-            this.pokemons = new ObservableCollection<Pokemon>(treinador.pokemons);
-            InitializeCommands();
+            name = treinador.Name;
+            pokemons = new ObservableCollection<Pokemon>(treinador.pokemons);
+            Id = treinador.Id;
         }
-        public Trainer(string name) 
-        {
-            pokemons = new ObservableCollection<Pokemon>();
-            this.name = name;
-            InitializeCommands();
-        }
-
         public void AddPokemon(string name)
         {
             this.pokemons.Add(new Pokemon(name));
@@ -56,23 +51,15 @@ namespace WpfApp1
         {
             this.pokemons = treinador.pokemons;
             this.name = treinador.Name;
+            this.Id = treinador.Id;
             Notify("Name");
             Notify("Pokemons");
         }
 
-        private void InitializeCommands()
-        {
-            AddRandomPokemonCommand = new RelayCommand((object _) =>
-            {
-                this.AddRandomPokemon();
-            });
-        }
         private void Notify([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-        public string Name { get { return name; } set { name = value; } }
-        public int Id { get; set; }
-        public ObservableCollection<Pokemon> Pokemons { get { return pokemons; } set { pokemons = value; } }
+
     }
 }

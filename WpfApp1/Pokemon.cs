@@ -10,12 +10,18 @@ namespace WpfApp1
         private string spriteFront;
         private string spriteBack;
         private string type;
+        public int Id { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Pokemon() { }
         public Pokemon(string name) 
         {
             this.name = name;
+        }
+        public Pokemon(int id, string name)
+        {
+            this.name = name;
+            this.Id = id;
         }
         public Pokemon(Pokemon pokemon)
         {
@@ -28,6 +34,7 @@ namespace WpfApp1
             SpriteFront = pokemon.SpriteFront;
             SpriteBack = pokemon.SpriteBack;
             Type = pokemon.Type;
+            Id = pokemon.Id;
         }
 
         public void FetchAPIData()
