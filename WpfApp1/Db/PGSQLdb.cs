@@ -28,94 +28,140 @@ namespace WpfApp1
                     _readPokemonsOf(trainer);
                 }
                 Disconnect();
+                return trainers;
             }
             catch (Exception e)
             {
                 throw e;
             }
-            return trainers;
         }
         public Pokemon GetPokemon(Pokemon pokemon)
         {
-            Connect();
-            Pokemon result = _searchPokemon(pokemon);
-            Disconnect();
-            return result;
+            try
+            {
+                Connect();
+                Pokemon result = _searchPokemon(pokemon);
+                Disconnect();
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public void InsertPokemon(Trainer trainer, Pokemon pokemon)
         {
-            Connect();
             try
             {
+                Connect();
                 Pokemon search = _searchPokemon(pokemon);
                 if (search == null)
                     _createPokemon(pokemon);
                 else
                     pokemon.CopyFrom(search);
                 _attachPokemon(trainer, pokemon);
+                Disconnect();
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
-                throw;
-            }
-            finally
-            {
-                cmd.Dispose();
-                reader.Dispose();
-            }
-            Disconnect();
+                throw e;
+            }          
         }
 
         public void InsertTrainer(Trainer trainer)
         {
-            Connect();
-            _createTrainer(trainer);
-            foreach (Pokemon pokemon in trainer.Pokemons)
+            try
             {
-                if(_searchPokemon(pokemon) == null)
-                    _createPokemon(pokemon);
-                _attachPokemon(trainer, pokemon);
+                Connect();
+                _createTrainer(trainer);
+                foreach (Pokemon pokemon in trainer.Pokemons)
+                {
+                    if (_searchPokemon(pokemon) == null)
+                        _createPokemon(pokemon);
+                    _attachPokemon(trainer, pokemon);
+                }
+                Disconnect();
             }
-            Disconnect();
+            catch (Exception e)
+            {
+
+                throw e;
+            }
         }
 
         public void RemoveTrainer(Trainer trainer)
         {
-            Connect();
-            _deleteTrainer(trainer);
-            foreach (Pokemon pokemon in trainer.Pokemons)
+            try
             {
-                _detachPokemon(trainer, pokemon);
+                Connect();
+                _deleteTrainer(trainer);
+                foreach (Pokemon pokemon in trainer.Pokemons)
+                {
+                    _detachPokemon(trainer, pokemon);
+                }
+                Disconnect();
             }
-            Disconnect();
+            catch (Exception e)
+            {
+
+                throw e;
+            }
         }
         public void DetachPokemon(Trainer trainer, Pokemon pokemon)
         {
-            Connect();
-            _detachPokemon(trainer, pokemon);
-            Disconnect();
+            try
+            {
+                Connect();
+                _detachPokemon(trainer, pokemon);
+                Disconnect();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
         public void AttachPokemon(Trainer trainer, Pokemon pokemon)
         {
-            Connect();
-            _attachPokemon(trainer, pokemon);
-            Disconnect();
+            try
+            {
+                Connect();
+                _attachPokemon(trainer, pokemon);
+                Disconnect();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public void UpdatePokemon(Pokemon pokemon)
         {
-            Connect();
-            _updatePokemon(pokemon);
-            Disconnect();
+            try
+            {
+                Connect();
+                _updatePokemon(pokemon);
+                Disconnect();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public void UpdateTrainer(Trainer treinador)
         {
-            Connect();
-            _updateTrainer(treinador);
-            Disconnect();
+            try
+            {
+                Connect();
+                _updateTrainer(treinador);
+                Disconnect();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
         private List<Trainer> _readTrainers()
         {
