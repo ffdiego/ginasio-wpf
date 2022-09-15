@@ -9,7 +9,7 @@ using WpfApp1.ViewModels;
 
 namespace WpfApp1
 {
-    public class VMMain : INotifyPropertyChanged
+    public class MainVM : INotifyPropertyChanged
     {
         public ObservableCollection<Trainer> trainers { get; set; }
         private Trainer highlightedTrainer;
@@ -19,11 +19,12 @@ namespace WpfApp1
         public RelayCommand Edit { get; private set; }
         public RelayCommand Remove { get; private set; }
         public RelayCommand NewPokemon { get; private set; }
-        public VMMain()
+        public MainVM()
         {
-            Console.WriteLine("Iniciando tudo!");
+            Gym gym = new Gym();
+            trainers = gym.Trainers;
             IniciaComandos();
-            DBManager.SetDB(DBType.MariaDB);
+            /*
             try
             {
                 trainers = new ObservableCollection<Trainer>(DBManager.GetAllTrainers());
@@ -31,15 +32,15 @@ namespace WpfApp1
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
-            }
+            }*/
         }
         public void IniciaComandos()
         {
             Add = new RelayCommand( (object _) => {
-                VMEditTrainer vm = new VMEditTrainer(trainers);
+                EditTrainerVM vm = new EditTrainerVM(trainers);
             });
             Edit = new RelayCommand((object _) => {
-                VMEditTrainer vm = new VMEditTrainer(trainers, highlightedTrainer);
+                EditTrainerVM vm = new EditTrainerVM(trainers, highlightedTrainer);
             }, (object _) => this.highlightedTrainer != null);
             Remove = new RelayCommand((object _) => {
                 DBManager.RemoveTrainer(HighlightedTrainer);
@@ -60,7 +61,8 @@ namespace WpfApp1
             {
                 //todo: show
                 highlightedTrainer = value;
-                HighlightedPokemon = (value.Pokemons.Count > 0) ? value.Pokemons[0] : null;
+                if (value != null)
+                    HighlightedPokemon = (value.Pokemons.Count > 0) ? value.Pokemons[0] : null;
                 Notify();
             }
         }

@@ -33,6 +33,7 @@ namespace WpfApp1
 
                 JsonElement sprites = pokemonDetails.GetProperty("sprites").GetProperty("versions").GetProperty("generation-v").GetProperty("black-white").GetProperty("animated");
 
+                target.Id = pokemonDetails.GetProperty("id").GetInt32(); 
                 target.Name = Capitalize(pokemonDetails.GetProperty("name").ToString());
                 target.Type = Capitalize(pokemonDetails.GetProperty("types")[0].GetProperty("type").GetProperty("name").ToString());
                 target.SpriteFront = sprites.GetProperty("front_default").ToString();

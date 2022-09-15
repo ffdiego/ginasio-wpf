@@ -8,7 +8,7 @@ using WpfApp1.Db;
 
 namespace WpfApp1.ViewModels
 {
-    public class VMEditTrainer
+    public class EditTrainerVM
     {
         private ObservableCollection<Trainer> trainers;
         private Trainer source, editTrainer;
@@ -16,16 +16,16 @@ namespace WpfApp1.ViewModels
         private EditTrainer screen;
         public RelayCommand AddPokemon { get; private set; }
         public RelayCommand RemovePokemon { get; private set; }
-        private VMEditTrainer()
+        private EditTrainerVM()
         {
         }
-        public VMEditTrainer(ObservableCollection<Trainer> list)
+        public EditTrainerVM(ObservableCollection<Trainer> list)
         {
             trainers = list;
             editTrainer = new Trainer();
             DisplayScreen();
         }
-        public VMEditTrainer(ObservableCollection<Trainer> list, Trainer treinador)
+        public EditTrainerVM(ObservableCollection<Trainer> list, Trainer treinador)
         {
             trainers = list;
             source = treinador;
@@ -58,7 +58,7 @@ namespace WpfApp1.ViewModels
         {
             AddPokemon = new RelayCommand((object _) =>
             {
-                VMEditPokemon vm = new VMEditPokemon(Treinador);
+                EditPokemonVM vm = new EditPokemonVM(Treinador);
             });
             RemovePokemon = new RelayCommand((object _) =>
             {

@@ -302,9 +302,9 @@ namespace WpfApp1
                     {
                         Id = reader.GetInt32(0),
                         Name = reader.GetString(1),
-                        Type = reader.GetString(2),
-                        SpriteFront = reader.GetString(3),
-                        SpriteBack = reader.GetString(4),
+                        //Type = reader.GetString(2),
+                        //SpriteFront = reader.GetString(3),
+                        //SpriteBack = reader.GetString(4),
                     };
                     trainer.AddPokemon(p);
                 }

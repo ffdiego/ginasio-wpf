@@ -37,9 +37,13 @@ namespace WpfApp1
             Id = pokemon.Id;
         }
 
-        public void FetchAPIData()
+        public void FetchData()
         {
-            _ = PokeApi.ApplyPokemonAPIInfo(this.name, this);
+            if(Name == null || Type == null || SpriteFront == null || spriteBack == null)
+            {
+                _ = PokeApi.ApplyPokemonAPIInfo(this.name, this);
+
+            }
         }
 
         private void Notify([CallerMemberName] string name = null)

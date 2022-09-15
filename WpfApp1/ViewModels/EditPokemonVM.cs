@@ -10,7 +10,7 @@ using WpfApp1.Views;
 
 namespace WpfApp1.ViewModels
 {
-    public class VMEditPokemon
+    public class EditPokemonVM
     {
         private EditPokemon screen;
         private Pokemon source, editPokemon;
@@ -21,17 +21,17 @@ namespace WpfApp1.ViewModels
         public RelayCommand OK { get; private set; }
         public RelayCommand Cancel { get; private set; }
 
-        private VMEditPokemon()
+        private EditPokemonVM()
         {
             
         }
-        public VMEditPokemon(Trainer treinador)
+        public EditPokemonVM(Trainer treinador)
         {
             owner = treinador;
             this.editPokemon = new Pokemon();
             DisplayScreen();
         }
-        public VMEditPokemon(Trainer treinador, Pokemon pokemon)
+        public EditPokemonVM(Trainer treinador, Pokemon pokemon)
         {
             owner = treinador;
             source = pokemon;

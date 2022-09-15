@@ -126,6 +126,7 @@
     <Compile Include="Db\MARIAdb.cs" />
     <Compile Include="Db\PGSQLdb.cs" />
     <Compile Include="Db\IDatabase.cs" />
+    <Compile Include="Gym.cs" />
     <Compile Include="PokeApi.cs" />
     <Compile Include="Views\EditTrainer.xaml.cs">
       <DependentUpon>EditTrainer.xaml</DependentUpon>
@@ -133,8 +134,8 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="Pokemon.cs" />
     <Compile Include="Trainer.cs" />
-    <Compile Include="ViewModels\VMEditPokemon.cs" />
-    <Compile Include="ViewModels\VMEditTrainer.cs" />
+    <Compile Include="ViewModels\EditPokemonVM.cs" />
+    <Compile Include="ViewModels\EditTrainerVM.cs" />
     <Page Include="Views\EditTrainer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -160,7 +161,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ViewModels\VMMain.cs" />
+    <Compile Include="ViewModels\MainVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

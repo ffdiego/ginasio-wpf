@@ -24,7 +24,7 @@ namespace WpfApp1
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new VMMain();
+            DataContext = new MainVM();
         }
     }
 }
