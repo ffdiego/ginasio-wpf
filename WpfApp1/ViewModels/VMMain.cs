@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using WpfApp1.Db;
@@ -22,7 +23,7 @@ namespace WpfApp1
         {
             Console.WriteLine("Iniciando tudo!");
             IniciaComandos();
-            DBManager.SetDB(DBType.PostGRES);
+            DBManager.SetDB(DBType.MariaDB);
             try
             {
                 trainers = new ObservableCollection<Trainer>(DBManager.GetAllTrainers());
@@ -57,7 +58,9 @@ namespace WpfApp1
             get { return highlightedTrainer; }
             set
             {
+                //todo: show
                 highlightedTrainer = value;
+                HighlightedPokemon = (value.Pokemons.Count > 0) ? value.Pokemons[0] : null;
                 Notify();
             }
         }
@@ -66,13 +69,15 @@ namespace WpfApp1
             get { return highlightedPokemon; }
             set
             {
-                if (value == null) return;
                 highlightedPokemon = value;
-                Console.WriteLine("Troquei para o pokemon: " + value.Name);
-                if(value.SpriteFront == null)
+                if (value != null)
                 {
-                    _ = PokeApi.ApplyPokemonAPIInfo(value.Name, highlightedPokemon);
-                }
+                    Console.WriteLine("Troquei para o pokemon: " + value.Name);
+                    if (value.SpriteFront == null)
+                    {
+                        _ = PokeApi.ApplyPokemonAPIInfo(value.Name, highlightedPokemon);
+                    }
+                } 
                 Notify();
             }
         }  
