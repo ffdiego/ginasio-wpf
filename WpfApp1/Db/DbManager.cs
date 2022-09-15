@@ -19,6 +19,7 @@ namespace WpfApp1.Db
                     db = new PGSQLdb();
                     break;
                 case DBType.MariaDB:
+                    db = new MARIAdb();
                     break;
                 default:
                     break;
