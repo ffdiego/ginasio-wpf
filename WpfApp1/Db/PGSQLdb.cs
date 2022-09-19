@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Xml.Linq;
 
@@ -35,27 +36,14 @@ namespace WpfApp1
                 throw e;
             }
         }
-        public Pokemon GetPokemon(Pokemon pokemon)
-        {
-            try
-            {
-                Connect();
-                Pokemon result = _searchPokemon(pokemon);
-                Disconnect();
-                return result;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
 
         public void InsertPokemon(Pokemon pokemon)
         {
             try
             {
                 Connect();
-                _createPokemon(pokemon);
+                if (_pokemonExistsInDb(pokemon) == false)
+                    _createPokemon(pokemon);
                 Disconnect();
             }
             catch (Exception e)
@@ -73,7 +61,7 @@ namespace WpfApp1
                 _createTrainer(trainer);
                 foreach (Pokemon pokemon in trainer.Pokemons)
                 {
-                    if (_searchPokemon(pokemon) == null)
+                    if (_pokemonExistsInDb(pokemon) == false)
                         _createPokemon(pokemon);
                     _attachPokemon(trainer, pokemon);
                 }
@@ -197,8 +185,8 @@ namespace WpfApp1
                 cmd.Parameters.AddWithValue("i", pokemon.Id);
                 cmd.Parameters.AddWithValue("n",pokemon.Name);
                 cmd.Parameters.AddWithValue("t", pokemon.Type);
-                cmd.Parameters.AddWithValue("f", pokemon.SpriteFront);
-                cmd.Parameters.AddWithValue("b", pokemon.SpriteBack);
+                cmd.Parameters.AddWithValue("f", Convert.ToBase64String(pokemon.SpriteFront.ToArray()));
+                cmd.Parameters.AddWithValue("b", Convert.ToBase64String(pokemon.SpriteBack.ToArray()));
                 cmd.ExecuteNonQuery();
             }
             catch (Exception e)
@@ -232,26 +220,20 @@ namespace WpfApp1
             return result;
         }
         // Read
-        private Pokemon _searchPokemon(Pokemon pokemon)
+        private bool _pokemonExistsInDb(Pokemon pokemon)
         {
-            Pokemon result = null;
+            bool result = false;
             try
             {
-                cmd = new NpgsqlCommand("SELECT id, name, type, sprite_front, sprite_back FROM pokemon WHERE name = @i LIMIT 1", connection);
-                cmd.Parameters.AddWithValue("id",pokemon.Id);
+                cmd = new NpgsqlCommand("SELECT id FROM pokemon WHERE id = @i LIMIT 1", connection);
+                cmd.Parameters.AddWithValue("i",pokemon.Id);
                 reader = cmd.ExecuteReader();
                 if (reader.HasRows)
                 {
                     while (reader.Read())
-                        result = new Pokemon()
-                        {
-                            Id = reader.GetInt32(0),
-                            Name = reader.GetString(1),
-                            Type = reader.GetString(2),
-                            SpriteFront = reader.GetString(3),
-                            SpriteBack = reader.GetString(4),
-                        };
+                        result = true;
                 }
+                return result;
             }
             catch (Exception e)
             {
@@ -262,7 +244,7 @@ namespace WpfApp1
                 cmd.Dispose();
                 reader.Dispose();
             }
-            return result;
+
         }
         private List<Pokemon> _readPokemonsOf(int id)
         {
@@ -282,8 +264,8 @@ namespace WpfApp1
                         Id = reader.GetInt32(0),
                         Name = reader.GetString(1),
                         Type = reader.GetString(2),
-                        SpriteFront = reader.GetString(3),
-                        SpriteBack = reader.GetString(4),
+                        SpriteFront = new MemoryStream(Convert.FromBase64String(reader.GetString(3))),
+                        SpriteBack = new MemoryStream(Convert.FromBase64String(reader.GetString(4)))
                     };
                     result.Add(p);
                 }

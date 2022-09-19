@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
 using WpfApp1.Db;
+using System.Windows;
 
 namespace WpfApp1
 {
@@ -38,6 +39,9 @@ namespace WpfApp1
         }
         public void AttachPokemon(Pokemon pokemon)
         {
+            bool alreadyContains = Pokemons.Where(p => p.Id == pokemon.Id).Any();
+            if (alreadyContains)
+                return;
             pokemons.Add(pokemon);
             DBManager.AddPokemon(pokemon);
             DBManager.AttachPokemon(this, pokemon);

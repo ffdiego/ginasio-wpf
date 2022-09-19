@@ -1,7 +1,7 @@
 
 namespace TestProject1
 {
-    public class TestDB
+    public class PokeAPITest
     {
         [SetUp]
         public void Setup()
@@ -9,13 +9,10 @@ namespace TestProject1
             
         }
         [Test]
-        public void ShouldAddAPokemon()
+
+        public void ShouldThrowErrorOnInexistentPokemon()
         {
 
-        }   
-        public void ShouldConsultDBFirst()
-        {    
-            
         }
     }
 }

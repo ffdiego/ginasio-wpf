@@ -69,14 +69,14 @@
             <StackPanel>
                 <TabControl Height="200" Width="200">
                     <TabItem Header="Frente">
-                        <Image Source="{Binding SpriteFront}" gif:AnimationBehavior.SourceUri="{Binding SpriteFront}"  RenderOptions.BitmapScalingMode="NearestNeighbor" >
+                        <Image gif:AnimationBehavior.SourceStream="{Binding SpriteFront}"  RenderOptions.BitmapScalingMode="NearestNeighbor" >
                             <Image.Effect>
                                 <DropShadowEffect/>
                             </Image.Effect>
                         </Image>
                     </TabItem>
                     <TabItem Header="Costas">
-                        <Image Source="{Binding SpriteBack}" gif:AnimationBehavior.SourceUri="{Binding SpriteBack}" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderTransformOrigin="0.5,0.5" >
+                        <Image gif:AnimationBehavior.SourceStream="{Binding SpriteBack}" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderTransformOrigin="0.5,0.5" >
                             <Image.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform ScaleX="-1"/>
