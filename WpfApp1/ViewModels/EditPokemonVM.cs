@@ -13,9 +13,10 @@ namespace WpfApp1.ViewModels
     public class EditPokemonVM
     {
         private EditPokemon screen;
-        private Pokemon source, editPokemon;
+        private Pokemon editPokemon;
         private Trainer owner;
         public string Name { get; set; }
+        public Pokemon EditPokemon { get { return editPokemon; } set { editPokemon = value; } }
         public string ErrorMSG { get; private set; }
         public RelayCommand Fetch { get; private set; }
         public RelayCommand OK { get; private set; }
@@ -28,51 +29,33 @@ namespace WpfApp1.ViewModels
         public EditPokemonVM(Trainer treinador)
         {
             owner = treinador;
-            this.editPokemon = new Pokemon();
-            DisplayScreen();
-        }
-        public EditPokemonVM(Trainer treinador, Pokemon pokemon)
-        {
-            owner = treinador;
-            source = pokemon;
-            editPokemon = new Pokemon(pokemon);
+            editPokemon = new Pokemon();
             DisplayScreen();
         }
         private void DisplayScreen()
         {
             InitializeCommands();
-            this.screen = new EditPokemon();
-            this.screen.DataContext = this;
+            screen = new EditPokemon();
+            screen.DataContext = this;
             screen.ShowDialog();
             if (screen.DialogResult == true)
-            {
-                if(this.source != null)
-                {
-                    editPokemon.Id = source.Id;
-                    DBManager.UpdatePokemon(editPokemon);
-                    this.source.CopyFrom(editPokemon);
-                } else
-                {
-                    DBManager.AddPokemon(owner, editPokemon);
-                    owner.AddPokemon(EditPokemon);
-                }
-            }
+                owner.AttachPokemon(EditPokemon);
         }
         private void InitializeCommands()
         {
             Fetch = new RelayCommand((object _) =>
             {
-                _ = PokeApi.ApplyPokemonAPIInfo(Name, EditPokemon);
+                PokeApi.ApplyPokemonAPIInfo(Name, EditPokemon);
             });
             OK = new RelayCommand((object _) =>
             {
-                this.screen.DialogResult = true;
+                screen.DialogResult = true;
             });
             Cancel = new RelayCommand((object _) =>
             {
-                this.screen.DialogResult = false;
+                screen.DialogResult = false;
             });
         }
-        public Pokemon EditPokemon { get { return editPokemon; } set { editPokemon = value; } }
+        
     }
 }

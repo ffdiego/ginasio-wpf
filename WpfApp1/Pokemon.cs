@@ -14,19 +14,6 @@ namespace WpfApp1
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Pokemon() { }
-        public Pokemon(string name) 
-        {
-            this.name = name;
-        }
-        public Pokemon(int id, string name)
-        {
-            this.name = name;
-            this.Id = id;
-        }
-        public Pokemon(Pokemon pokemon)
-        {
-            this.CopyFrom(pokemon);
-        }
 
         public void CopyFrom(Pokemon pokemon)
         {
@@ -35,15 +22,6 @@ namespace WpfApp1
             SpriteBack = pokemon.SpriteBack;
             Type = pokemon.Type;
             Id = pokemon.Id;
-        }
-
-        public void FetchData()
-        {
-            if(Name == null || Type == null || SpriteFront == null || spriteBack == null)
-            {
-                _ = PokeApi.ApplyPokemonAPIInfo(this.name, this);
-
-            }
         }
 
         private void Notify([CallerMemberName] string name = null)

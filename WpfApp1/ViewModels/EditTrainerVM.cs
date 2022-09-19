@@ -10,24 +10,28 @@ namespace WpfApp1.ViewModels
 {
     public class EditTrainerVM
     {
-        private ObservableCollection<Trainer> trainers;
+        private Gym gym;
         private Trainer source, editTrainer;
-        public Pokemon HighlightedPokemon {get; set; }
         private EditTrainer screen;
+        public ObservableCollection<Trainer> trainers { get; private set; }
+        public Trainer Treinador { get { return editTrainer; } set { editTrainer = value; } }
+        public Pokemon HighlightedPokemon {get; set; }
         public RelayCommand AddPokemon { get; private set; }
         public RelayCommand RemovePokemon { get; private set; }
         private EditTrainerVM()
         {
         }
-        public EditTrainerVM(ObservableCollection<Trainer> list)
+        public EditTrainerVM(Gym gym)
         {
-            trainers = list;
+            this.gym = gym;
+            trainers = gym.Trainers;
             editTrainer = new Trainer();
             DisplayScreen();
         }
-        public EditTrainerVM(ObservableCollection<Trainer> list, Trainer treinador)
+        public EditTrainerVM(Gym gym, Trainer treinador)
         {
-            trainers = list;
+            this.gym = gym;
+            trainers = gym.Trainers;
             source = treinador;
             editTrainer = new Trainer(treinador);
             DisplayScreen();
@@ -43,14 +47,11 @@ namespace WpfApp1.ViewModels
             {
                 if (source != null) //I'm editing
                 {
-                    editTrainer.Id = source.Id;
-                    DBManager.UpdateTrainer(editTrainer);
                     source.CopyFrom(editTrainer);
                 }
                 else
                 {
-                    DBManager.AddTrainer(editTrainer);
-                    trainers.Add(editTrainer);
+                    gym.Add(editTrainer);
                 }
             }
         }
@@ -59,14 +60,13 @@ namespace WpfApp1.ViewModels
             AddPokemon = new RelayCommand((object _) =>
             {
                 EditPokemonVM vm = new EditPokemonVM(Treinador);
-            });
+            }, (object _) => source != null);
             RemovePokemon = new RelayCommand((object _) =>
             {
-                DBManager.RemovePokemon(Treinador, HighlightedPokemon);
-                Treinador.Pokemons.Remove(HighlightedPokemon);
+                Treinador.DetachPokemon(HighlightedPokemon);
             }, (object _) => HighlightedPokemon != null);
 
         }
-        public Trainer Treinador { get { return editTrainer; } set { editTrainer = value; } }
+
     }
 }

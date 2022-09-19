@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
+using WpfApp1.Db;
 
 namespace WpfApp1
 {
@@ -16,46 +17,48 @@ namespace WpfApp1
 
         private string name;
         private ObservableCollection<Pokemon> pokemons;
+        public ObservableCollection<Pokemon> Pokemons { get { return pokemons; } set { pokemons = value; } }
         public event PropertyChangedEventHandler PropertyChanged;
-        public RelayCommand AddRandomPokemonCommand { get; private set; }
         public string Name { get { return name; } set { name = value; } }
         public int Id { get; set; }
-        public ObservableCollection<Pokemon> Pokemons { get { return pokemons; } set { pokemons = value; } }
         public Trainer() { 
             pokemons = new ObservableCollection<Pokemon>();
         }
         public Trainer(Trainer treinador)
         {
             name = treinador.Name;
-            pokemons = new ObservableCollection<Pokemon>(treinador.pokemons);
             Id = treinador.Id;
+            pokemons = new ObservableCollection<Pokemon>(treinador.pokemons);
         }
-        public void AddPokemon(string name)
+        public Trainer(int id, string name, List<Pokemon> list)
         {
-            this.pokemons.Add(new Pokemon(name));
+            Name = name;
+            Id = id;
+            pokemons = new ObservableCollection<Pokemon>(list);
         }
-        public void AddPokemon(Pokemon pokemon)
+        public void AttachPokemon(Pokemon pokemon)
         {
-            this.pokemons.Add(pokemon);
+            pokemons.Add(pokemon);
+            DBManager.AddPokemon(pokemon);
+            DBManager.AttachPokemon(this, pokemon);
         }
-        public void AddRandomPokemon()
+        public void DetachPokemon(Pokemon pokemon)
         {
-            Random random = new Random();
-            Pokemon pokemon = new Pokemon();
-            this.AddPokemon(pokemon);
-            //the api call takes a pokemon number as argument
-            //here we request a random pokemon number between 0 and 150 
-            _ = PokeApi.ApplyPokemonAPIInfo(random.Next(151).ToString(), pokemon);
+            pokemons.Remove(pokemon);
+            DBManager.DetachPokemon(this, pokemon);
         }
         public void CopyFrom(Trainer treinador)
         {
             this.pokemons = treinador.pokemons;
             this.name = treinador.Name;
-            this.Id = treinador.Id;
-            Notify("Name");
-            Notify("Pokemons");
+            Notify(nameof(name));
+            Notify(nameof(Pokemons));
+            DBManager.UpdateTrainer(this);
         }
-
+        public void SetPokemons(List<Pokemon> list)
+        {
+            Pokemons = new ObservableCollection<Pokemon>(list);
+        }
         private void Notify([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

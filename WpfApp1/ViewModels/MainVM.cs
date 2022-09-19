@@ -12,6 +12,7 @@ namespace WpfApp1
     public class MainVM : INotifyPropertyChanged
     {
         public ObservableCollection<Trainer> trainers { get; set; }
+        Gym gym;
         private Trainer highlightedTrainer;
         public Pokemon highlightedPokemon;
         // Relay Commands
@@ -21,30 +22,20 @@ namespace WpfApp1
         public RelayCommand NewPokemon { get; private set; }
         public MainVM()
         {
-            Gym gym = new Gym();
+            gym = new Gym();
             trainers = gym.Trainers;
             IniciaComandos();
-            /*
-            try
-            {
-                trainers = new ObservableCollection<Trainer>(DBManager.GetAllTrainers());
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }*/
         }
         public void IniciaComandos()
         {
             Add = new RelayCommand( (object _) => {
-                EditTrainerVM vm = new EditTrainerVM(trainers);
+                EditTrainerVM vm = new EditTrainerVM(gym);
             });
             Edit = new RelayCommand((object _) => {
-                EditTrainerVM vm = new EditTrainerVM(trainers, highlightedTrainer);
+                EditTrainerVM vm = new EditTrainerVM(gym, highlightedTrainer);
             }, (object _) => this.highlightedTrainer != null);
             Remove = new RelayCommand((object _) => {
-                DBManager.RemoveTrainer(HighlightedTrainer);
-                trainers.Remove(highlightedTrainer);
+                gym.Remove(highlightedTrainer);
             }, (object _) => this.highlightedTrainer != null);
         }
 
@@ -59,7 +50,6 @@ namespace WpfApp1
             get { return highlightedTrainer; }
             set
             {
-                //todo: show
                 highlightedTrainer = value;
                 if (value != null)
                     HighlightedPokemon = (value.Pokemons.Count > 0) ? value.Pokemons[0] : null;
@@ -72,14 +62,6 @@ namespace WpfApp1
             set
             {
                 highlightedPokemon = value;
-                if (value != null)
-                {
-                    Console.WriteLine("Troquei para o pokemon: " + value.Name);
-                    if (value.SpriteFront == null)
-                    {
-                        _ = PokeApi.ApplyPokemonAPIInfo(value.Name, highlightedPokemon);
-                    }
-                } 
                 Notify();
             }
         }  

@@ -46,17 +46,17 @@ namespace WpfApp1.Db
         {
             db.RemoveTrainer(trainer);
         }
-        static public void AddPokemon(Trainer t, Pokemon p)
+        static public void AddPokemon(Pokemon p)
         {
-            db.InsertPokemon(t, p);
+            db.InsertPokemon(p);
         }
-        static public void RemovePokemon(Trainer t, Pokemon p)
+        static public void AttachPokemon(Trainer t, Pokemon p)
+        {
+            db.AttachPokemon(t, p);
+        }
+        static public void DetachPokemon(Trainer t, Pokemon p)
         {
             db.DetachPokemon(t, p);
-        }
-        static public void UpdatePokemon(Pokemon pokemon)
-        {
-            db.UpdatePokemon(pokemon);
         }
         static public void UpdateTrainer(Trainer trainer)
         {

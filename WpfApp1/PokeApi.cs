@@ -13,7 +13,7 @@ namespace WpfApp1
     static class PokeApi
     {
         private static readonly HttpClient client = new HttpClient();
-        public static async Task ApplyPokemonAPIInfo(string pokemonName, Pokemon target)
+        public static async void ApplyPokemonAPIInfo(string pokemonName, Pokemon target)
         {
             Console.WriteLine("Tentando conectar!");
 
@@ -38,16 +38,7 @@ namespace WpfApp1
                 target.Type = Capitalize(pokemonDetails.GetProperty("types")[0].GetProperty("type").GetProperty("name").ToString());
                 target.SpriteFront = sprites.GetProperty("front_default").ToString();
                 target.SpriteBack = sprites.GetProperty("back_default").ToString();
-                Console.WriteLine("Dados Obtidos!");
             }
-            else
-            {
-                Console.WriteLine("HighlightedPokemon não encontrado!");
-                target.SpriteFront = "";
-                target.SpriteBack = "";
-                target.Type = "";
-            }
-
         }
 
         private static string Capitalize(string text)
