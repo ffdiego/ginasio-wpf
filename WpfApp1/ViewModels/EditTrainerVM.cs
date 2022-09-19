@@ -26,7 +26,6 @@ namespace WpfApp1.ViewModels
             this.gym = gym;
             trainers = gym.Trainers;
             editTrainer = new Trainer();
-            DisplayScreen();
         }
         public EditTrainerVM(Gym gym, Trainer treinador)
         {
@@ -34,10 +33,9 @@ namespace WpfApp1.ViewModels
             trainers = gym.Trainers;
             source = treinador;
             editTrainer = new Trainer(treinador);
-            DisplayScreen();
         }
 
-        private void DisplayScreen()
+        public void ShowWindow()
         {
             InitializeCommands();
             screen = new EditTrainer();
@@ -60,6 +58,7 @@ namespace WpfApp1.ViewModels
             AddPokemon = new RelayCommand((object _) =>
             {
                 EditPokemonVM vm = new EditPokemonVM(Treinador);
+                vm.ShowWindow();
             }, (object _) => source != null);
             RemovePokemon = new RelayCommand((object _) =>
             {

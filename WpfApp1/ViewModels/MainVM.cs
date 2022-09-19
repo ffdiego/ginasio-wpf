@@ -30,9 +30,11 @@ namespace WpfApp1
         {
             Add = new RelayCommand( (object _) => {
                 EditTrainerVM vm = new EditTrainerVM(gym);
+                vm.ShowWindow();
             });
             Edit = new RelayCommand((object _) => {
                 EditTrainerVM vm = new EditTrainerVM(gym, highlightedTrainer);
+                vm.ShowWindow();
             }, (object _) => this.highlightedTrainer != null);
             Remove = new RelayCommand((object _) => {
                 gym.Remove(highlightedTrainer);

@@ -30,9 +30,8 @@ namespace WpfApp1.ViewModels
         {
             owner = treinador;
             editPokemon = new Pokemon();
-            DisplayScreen();
         }
-        private void DisplayScreen()
+        public void ShowWindow()
         {
             InitializeCommands();
             screen = new EditPokemon();
