@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace WpfApp1
 {
-    public class Trainer : INotifyPropertyChanged
+    public class Trainer : INotifyPropertyChanged, IEquatable<Trainer>
     {
 
         private string name;
@@ -67,6 +67,11 @@ namespace WpfApp1
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
+        //todo: Pergunta: devemos implementar recursos com o Equals?
+        public bool Equals(Trainer other)
+        {
+            bool pokemonListsAreIdentical = new HashSet<Pokemon>(this.Pokemons).SetEquals(other.Pokemons);
+            return this.Id == other.Id && this.Name == other.Name && pokemonListsAreIdentical;
+        }
     }
 }

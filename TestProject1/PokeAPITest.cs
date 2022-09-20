@@ -9,10 +9,22 @@ namespace TestProject1
             
         }
         [Test]
-
-        public void ShouldThrowErrorOnInexistentPokemon()
+        public async Task AddValidPokemon()
         {
-
+            Pokemon p = new Pokemon();
+            string Error = await PokeApi.ApplyPokemonAPIInfo("1", p);
+            Console.WriteLine(p.Name);
+            Assert.IsNotNull(p.SpriteFront);
+            Assert.IsEmpty(Error);
+        }
+        [Test]
+        public async Task AddInvalidPokemon()
+        {
+            Pokemon p = new Pokemon();
+            string Error = await PokeApi.ApplyPokemonAPIInfo("0", p);
+            Console.WriteLine(p.Name);
+            Assert.IsNull(p.SpriteFront);
+            Assert.IsNotEmpty(Error);
         }
     }
 }
