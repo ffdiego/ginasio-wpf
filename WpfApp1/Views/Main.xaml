@@ -43,7 +43,7 @@
                 </ListView.View>
             </ListView>
         </GroupBox>
-        <GroupBox Width="200" Padding="10" Margin="427,10,311,10">
+        <GroupBox Padding="10" Margin="427,10,301,10">
             <GroupBox.Header>
                 <TextBlock>Pokemons</TextBlock>
             </GroupBox.Header>
