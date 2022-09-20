@@ -22,8 +22,15 @@ namespace WpfApp1
         public RelayCommand NewPokemon { get; private set; }
         public MainVM()
         {
-            gym = new Gym();
-            trainers = gym.Trainers;
+            try
+            {
+                gym = new Gym();
+                trainers = gym.Trainers;
+            } catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+                Application.Current.Shutdown();
+            }
             IniciaComandos();
         }
         public void IniciaComandos()

@@ -18,10 +18,9 @@ namespace WpfApp1
                 DBManager.SetDB(DBType.PostGRES);
                 Trainers = new ObservableCollection<Trainer>(DBManager.GetAllTrainers());
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                MessageBox.Show(e.Message);
-                Application.Current.Shutdown();
+                throw;
             }
         }
         public ObservableCollection<Trainer> Trainers { get; }
@@ -32,9 +31,9 @@ namespace WpfApp1
                 DBManager.AddTrainer(trainer);
                 Trainers.Add(trainer);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
         public void Remove(Trainer trainer)
@@ -44,9 +43,9 @@ namespace WpfApp1
                 DBManager.RemoveTrainer(trainer);
                 Trainers.Remove(trainer);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
     }
