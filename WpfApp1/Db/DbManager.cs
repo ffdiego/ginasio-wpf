@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WpfApp1.Db
 {
-    static class DBManager
+    static public class DBManager
     {
         static IDatabase db;
 
@@ -37,7 +37,10 @@ namespace WpfApp1.Db
                 throw e;
             }
         }
-
+        static public void ResetTables()
+        {
+            db.ResetTables();
+        }
         static public void AddTrainer(Trainer trainer)
         {
             db.InsertTrainer(trainer);
@@ -65,7 +68,7 @@ namespace WpfApp1.Db
     }
 }
 
-internal enum DBType
+public enum DBType
 {
     PostGRES,
     MariaDB

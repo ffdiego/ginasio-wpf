@@ -2,6 +2,7 @@
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Remoting.Messaging;
 using System.Windows;
 
@@ -255,8 +256,8 @@ namespace WpfApp1
                             Id = reader.GetInt32(0),
                             Name = reader.GetString(1),
                             Type = reader.GetString(2),
-                            SpriteFront = reader.GetString(3),
-                            SpriteBack = reader.GetString(4),
+                            SpriteFront = new MemoryStream(Convert.FromBase64String(reader.GetString(3))),
+                            SpriteBack = new MemoryStream(Convert.FromBase64String(reader.GetString(4)))
                         };
                 }
             }
@@ -289,8 +290,8 @@ namespace WpfApp1
                         Id = reader.GetInt32(0),
                         Name = reader.GetString(1),
                         Type = reader.GetString(2),
-                        SpriteFront = reader.GetString(3),
-                        SpriteBack = reader.GetString(4),
+                        SpriteFront = new MemoryStream(Convert.FromBase64String(reader.GetString(3))),
+                        SpriteBack = new MemoryStream(Convert.FromBase64String(reader.GetString(4)))
                     };
                     result.Add(p);
                 }
@@ -387,6 +388,10 @@ namespace WpfApp1
             connection.Close();
         }
 
+        public void ResetTables()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

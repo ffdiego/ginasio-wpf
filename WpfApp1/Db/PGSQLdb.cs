@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows;
-using System.Xml.Linq;
 
 namespace WpfApp1
 {
@@ -17,7 +15,13 @@ namespace WpfApp1
         {
             connectionString = "Host=127.0.0.1;Username=postgres;Password=docker";
         }
-
+        public void ResetTables()
+        {
+            Connect();
+            _dropTables();
+            _createTables();
+            Disconnect();
+        }
         public List<Trainer> GetAllTrainers()
         {
             try
@@ -31,9 +35,9 @@ namespace WpfApp1
                 Disconnect();
                 return result;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -46,10 +50,9 @@ namespace WpfApp1
                     _createPokemon(pokemon);
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                MessageBox.Show(e.Message);
-                throw e;
+                throw;
             }          
         }
 
@@ -67,10 +70,10 @@ namespace WpfApp1
                 }
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
-                throw e;
+                throw;
             }
         }
 
@@ -82,10 +85,10 @@ namespace WpfApp1
                 _deleteTrainer(trainer);
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
-                throw e;
+                throw;
             }
         }
         public void DetachPokemon(Trainer trainer, Pokemon pokemon)
@@ -96,9 +99,9 @@ namespace WpfApp1
                 _detachPokemon(trainer, pokemon);
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
         public void AttachPokemon(Trainer trainer, Pokemon pokemon)
@@ -109,9 +112,9 @@ namespace WpfApp1
                 _attachPokemon(trainer, pokemon);
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -124,9 +127,9 @@ namespace WpfApp1
                 t.SetPokemons(_readPokemonsOf(t.Id));
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
         private List<Trainer> _readTrainers()
@@ -147,9 +150,9 @@ namespace WpfApp1
                 }
                 return list;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             } finally
             {
                 cmd.Dispose();
@@ -167,9 +170,9 @@ namespace WpfApp1
                 reader.Read();
                 trainer.Id = reader.GetInt16(0);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -189,9 +192,9 @@ namespace WpfApp1
                 cmd.Parameters.AddWithValue("b", Convert.ToBase64String(pokemon.SpriteBack.ToArray()));
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -208,9 +211,9 @@ namespace WpfApp1
                 cmd.Parameters.AddWithValue("p", pokemon.Id);
                 reader = cmd.ExecuteReader();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -235,9 +238,9 @@ namespace WpfApp1
                 }
                 return result;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -271,9 +274,9 @@ namespace WpfApp1
                 }
                 return result;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -293,10 +296,9 @@ namespace WpfApp1
                 cmd.Parameters.AddWithValue("i", t.Id);
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                MessageBox.Show(e.Message);
-                throw e;
+                throw;
             }
             finally
             {
@@ -312,9 +314,9 @@ namespace WpfApp1
                 cmd.Parameters.AddWithValue("i", trainer.Id);
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -331,14 +333,63 @@ namespace WpfApp1
                 cmd.Parameters.AddWithValue("p", pokemon.Id);
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
                 cmd.Dispose();
                 reader.Dispose();
+            }
+        }
+        private void _dropTables()
+        {
+            try
+            {
+                cmd = new NpgsqlCommand(@"  DROP TABLE IF EXISTS trainers2pokemons;
+                                            DROP TABLE IF EXISTS ginasio;
+                                            DROP TABLE IF EXISTS pokemon;", connection);
+                cmd.ExecuteNonQuery();
+            } catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                cmd.Dispose();
+            }
+        }
+        private void _createTables()
+        {
+            try
+            {
+                cmd = new NpgsqlCommand(@"
+                        CREATE TABLE ginasio (
+                            id SERIAL NOT NULL PRIMARY KEY,
+                            name VARCHAR(255) NOT NULL
+                        );
+                        CREATE TABLE pokemon (
+                            id SERIAL NOT NULL PRIMARY KEY,
+                            name VARCHAR(255) NOT NULL,
+                            type VARCHAR(255) NOT NULL,
+                            sprite_front TEXT NOT NULL,
+                            sprite_back TEXT NOT NULL
+                        );
+                        CREATE TABLE trainers2pokemons (
+                            id serial NOT NULL PRIMARY KEY,
+                            trainer_id SERIAL REFERENCES ginasio(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                            pokemon_id SERIAL REFERENCES pokemon(id) ON DELETE CASCADE ON UPDATE CASCADE
+                        );", connection);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                cmd.Dispose();
             }
         }
         private void Connect()
@@ -349,18 +400,17 @@ namespace WpfApp1
                 connection.Open();
                 if (connection.State == System.Data.ConnectionState.Open)
                 {
-                    Console.WriteLine("Success open postgreSQL connection");
+                    Console.WriteLine("Success: PostgreSQL connection opened");
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
         private void Disconnect()
         {
             connection.Close();
         }
-
     }
 }

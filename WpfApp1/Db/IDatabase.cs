@@ -8,6 +8,7 @@ namespace WpfApp1
 {
     interface IDatabase
     {
+        void ResetTables();
         // Trainer
         List<Trainer> GetAllTrainers();
         void InsertTrainer(Trainer trainer);
