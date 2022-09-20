@@ -1,7 +1,7 @@
 
 namespace TestProject1
 {
-    public class PokeAPITest
+    public class PokeAPITests
     {
         [SetUp]
         public void Setup()
@@ -14,8 +14,8 @@ namespace TestProject1
             Pokemon p = new Pokemon();
             string Error = await PokeApi.ApplyPokemonAPIInfo("1", p);
             Console.WriteLine(p.Name);
-            Assert.IsNotNull(p.SpriteFront);
-            Assert.IsEmpty(Error);
+            Assert.That(p.SpriteFront, Is.Not.Null);
+            Assert.That(Error, Is.Empty);
         }
         [Test]
         public async Task AddInvalidPokemon()
@@ -23,8 +23,8 @@ namespace TestProject1
             Pokemon p = new Pokemon();
             string Error = await PokeApi.ApplyPokemonAPIInfo("0", p);
             Console.WriteLine(p.Name);
-            Assert.IsNull(p.SpriteFront);
-            Assert.IsNotEmpty(Error);
+            Assert.That(p.SpriteFront, Is.Null);
+            Assert.That(Error, Is.Not.Empty);
         }
     }
 }

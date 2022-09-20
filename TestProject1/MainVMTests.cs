@@ -2,7 +2,7 @@ using WpfApp1.ViewModels;
 
 namespace TestProject1
 {
-    class MainVMTest
+    class MainVMTests
     {
         [SetUp]
         public void Setup()
@@ -13,10 +13,7 @@ namespace TestProject1
         [Test]
         public void First()
         {
-            Trainer t = new Trainer();
-            t.Name = "Diego";
-            EditPokemonVM vm = new EditPokemonVM(t);
-            Assert.IsTrue(vm.owner.Name == t.Name);
+
         }
     }
 }
