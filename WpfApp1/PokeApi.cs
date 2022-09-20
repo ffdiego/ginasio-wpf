@@ -1,31 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text.Json;
-using System.Runtime.CompilerServices;
-using WpfApp1.Db;
 using System.Windows;
 using System.Net;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace WpfApp1
 {
     public static class PokeApi
     {
         private static readonly HttpClient client = new HttpClient();
-        public static async void ApplyPokemonAPIInfo(string pokemonName, Pokemon target)
+        public static async Task<string> ApplyPokemonAPIInfo(string nameOrNumber, Pokemon target)
         {
             try
             {
-                target.CopyFrom(await getPokemonInfo(pokemonName));
+                target.CopyFrom(await getPokemonInfo(nameOrNumber));
+                return "";
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                return e.Message;
             }
         }
 

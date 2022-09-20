@@ -42,9 +42,9 @@ namespace WpfApp1.ViewModels
         }
         private void InitializeCommands()
         {
-            Fetch = new RelayCommand((object _) =>
+            Fetch = new RelayCommand(async (object _) =>
             {
-                PokeApi.ApplyPokemonAPIInfo(Name, EditPokemon);
+                ErrorMSG = await PokeApi.ApplyPokemonAPIInfo(Name, EditPokemon);
             });
             OK = new RelayCommand((object _) =>
             {
