@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Autofac.Extras.Moq;
+using Moq;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,15 +11,16 @@ using WpfApp1.ViewModels;
 
 namespace TestProject1
 {
-    class GymTests
+    class GymTestsMockedDB
     {
         private Gym gym;
         Trainer trainer1;
         private readonly Pokemon pokemon1;
-        public GymTests()
+        public GymTestsMockedDB()
         {
             trainer1 = new()
             {
+                Id = 1,
                 Name = "Diego"
             };
             pokemon1 = new()
@@ -28,7 +32,13 @@ namespace TestProject1
                 SpriteBack = new MemoryStream(new byte())
             };
 
-            DBManager.SetDB(new PGSQLdb());
+            List<Trainer> trainers = new();
+
+            var mock = AutoMock.GetLoose();
+            Mock<IDatabase> mockedDB = new Mock<IDatabase>();
+            mockedDB.Setup(x => x.GetAllTrainers()).Returns(trainers);
+
+            DBManager.SetDB(mockedDB.Object);
             DBManager.ResetTables();
             gym = new Gym();
         }

@@ -15,7 +15,7 @@
                 <TextBox Text="{Binding Name}" Height="25" Width="170" VerticalContentAlignment="Center" />
                 <Button Command="{Binding Fetch}" Width="30">OK</Button>
             </StackPanel>
-            <TextBlock Margin="0,0,0,25" Foreground="Red" Text="{Binding ErrorMSG}"></TextBlock>
+            <TextBlock Margin="0,0,0,25" Foreground="Red" Text="{Binding ErrorMSG}" TextWrapping="Wrap"></TextBlock>
             <TextBlock>Nome:</TextBlock>
             <TextBox Text="{Binding EditPokemon.Name}" Height="25" IsReadOnly="True" VerticalContentAlignment="Center" />
             <TextBlock>Tipo:</TextBlock>

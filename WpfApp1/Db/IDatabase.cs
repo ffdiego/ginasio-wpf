@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfApp1
 {
-    interface IDatabase
+    public interface IDatabase
     {
         void ResetTables();
         // Trainer

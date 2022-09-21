@@ -10,11 +10,12 @@ using WpfApp1.Views;
 
 namespace WpfApp1.ViewModels
 {
-    public class EditPokemonVM
+    public class EditPokemonVM : INotifyPropertyChanged
     {
         private EditPokemon screen;
         private Pokemon editPokemon;
         private Trainer owner;
+        public event PropertyChangedEventHandler PropertyChanged;
         public string Name { get; set; }
         public Pokemon EditPokemon { get { return editPokemon; } set { editPokemon = value; } }
         public string ErrorMSG { get; private set; }
@@ -46,6 +47,7 @@ namespace WpfApp1.ViewModels
             {
                 Pokemon result;
                 (result, ErrorMSG) = await PokeApi.GetPokemonAPIInfo(Name);
+                Notify(nameof(ErrorMSG));
                 if(result != null)
                     EditPokemon.CopyFrom(result);
 
@@ -59,6 +61,9 @@ namespace WpfApp1.ViewModels
                 screen.DialogResult = false;
             });
         }
-        
+        private void Notify([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
     }
 }

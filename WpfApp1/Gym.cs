@@ -15,7 +15,6 @@ namespace WpfApp1
         {
             try
             {
-                DBManager.SetDB(DBType.PostGRES);
                 Trainers = new ObservableCollection<Trainer>(DBManager.GetAllTrainers());
             }
             catch(Exception)

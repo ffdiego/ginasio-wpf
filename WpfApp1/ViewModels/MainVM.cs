@@ -22,6 +22,7 @@ namespace WpfApp1
         public RelayCommand NewPokemon { get; private set; }
         public MainVM()
         {
+            DBManager.SetDB(new PGSQLdb());
             try
             {
                 gym = new Gym();

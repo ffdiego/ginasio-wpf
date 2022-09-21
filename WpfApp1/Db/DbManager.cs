@@ -10,20 +10,9 @@ namespace WpfApp1.Db
     static public class DBManager
     {
         static IDatabase db;
-
-        static public void SetDB(DBType type)
+        static public void SetDB(IDatabase p_db)
         {
-            switch (type)
-            {
-                case DBType.PostGRES:
-                    db = new PGSQLdb();
-                    break;
-                case DBType.MariaDB:
-                    db = new MARIAdb();
-                    break;
-                default:
-                    break;
-            }
+            db = p_db;
         }
 
         static public List<Trainer> GetAllTrainers()
@@ -70,10 +59,4 @@ namespace WpfApp1.Db
             db.UpdateTrainer(trainer);
         }
     }
-}
-
-public enum DBType
-{
-    PostGRES,
-    MariaDB
 }
