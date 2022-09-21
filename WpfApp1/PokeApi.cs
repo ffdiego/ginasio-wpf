@@ -5,22 +5,24 @@ using System.Text.Json;
 using System.Windows;
 using System.Net;
 using System.IO;
+using WpfApp1.Db;
 
 namespace WpfApp1
 {
     public static class PokeApi
     {
         private static readonly HttpClient client = new HttpClient();
-        public static async Task<string> ApplyPokemonAPIInfo(string nameOrNumber, Pokemon target)
+        public static async Task<(Pokemon, string)> GetPokemonAPIInfo(string nameOrNumber)
         {
             try
             {
-                target.CopyFrom(await getPokemonInfo(nameOrNumber));
-                return "";
+                Pokemon result = DBManager.GetPokemon(nameOrNumber);
+                if (result == null) result = await getPokemonInfo(nameOrNumber);
+                return (result, "");
             }
             catch (Exception e)
             {
-                return e.Message;
+                return (null, e.Message);
             }
         }
 

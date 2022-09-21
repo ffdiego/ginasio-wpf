@@ -392,6 +392,11 @@ namespace WpfApp1
         {
             throw new NotImplementedException();
         }
+
+        public Pokemon SearchPokemon(string nameOrId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml.Linq;
 
 namespace WpfApp1
 {
@@ -40,7 +41,13 @@ namespace WpfApp1
                 throw;
             }
         }
-
+        public Pokemon SearchPokemon(string name)
+        {
+            Connect();
+            Pokemon pokemon = _getPokemon(name);
+            Disconnect();
+            return pokemon;
+        }
         public void InsertPokemon(Pokemon pokemon)
         {
             try
@@ -284,6 +291,48 @@ namespace WpfApp1
                 reader.Dispose();
             }
         }
+        private Pokemon _getPokemon(string nameOrId)
+        {
+            Pokemon result = new Pokemon();
+            int id;
+            try
+            {
+                if(int.TryParse(nameOrId, out id))
+                {
+                    cmd = new NpgsqlCommand(@"SELECT pokemon.id, name, type, sprite_front, sprite_back FROM pokemon
+                                          WHERE id = @id", connection);
+                    cmd.Parameters.AddWithValue("id", id);
+                } else
+                {
+                    cmd = new NpgsqlCommand(@"SELECT pokemon.id, name, type, sprite_front, sprite_back FROM pokemon
+                                          WHERE LOWER(name) = @name", connection);
+                    cmd.Parameters.AddWithValue("name", nameOrId);
+                }
+
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    result = new Pokemon()
+                    {
+                        Id = reader.GetInt32(0),
+                        Name = reader.GetString(1),
+                        Type = reader.GetString(2),
+                        SpriteFront = new MemoryStream(Convert.FromBase64String(reader.GetString(3))),
+                        SpriteBack = new MemoryStream(Convert.FromBase64String(reader.GetString(4)))
+                    };
+                }
+                return (result.Id != 0) ? result : null;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                cmd.Dispose();
+                reader.Dispose();
+            }
+        }
         // Update
         private void _updateTrainer(Trainer t)
         {
@@ -412,5 +461,7 @@ namespace WpfApp1
         {
             connection.Close();
         }
+
+
     }
 }

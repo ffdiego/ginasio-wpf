@@ -16,6 +16,7 @@ namespace WpfApp1
         void RemoveTrainer(Trainer trainer);
 
         // Pokemon
+        Pokemon SearchPokemon(string nameOrId);
         void InsertPokemon(Pokemon pokemon);
         void AttachPokemon(Trainer trainer, Pokemon pokemon);
         void DetachPokemon(Trainer trainer, Pokemon pokemon);

@@ -49,6 +49,10 @@ namespace WpfApp1.Db
         {
             db.RemoveTrainer(trainer);
         }
+        static public Pokemon GetPokemon(string nameOrId)
+        {
+            return db.SearchPokemon(nameOrId);
+        }
         static public void AddPokemon(Pokemon p)
         {
             db.InsertPokemon(p);

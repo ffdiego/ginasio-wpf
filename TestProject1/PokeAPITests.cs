@@ -1,30 +1,44 @@
 
+using Autofac.Extras.Moq;
+using WpfApp1;
+
 namespace TestProject1
 {
     public class PokeAPITests
     {
-        [SetUp]
-        public void Setup()
+        Gym gym;
+        public PokeAPITests()
         {
-            
+            DBManager.SetDB(DBType.PostGRES);
+            DBManager.ResetTables();
+            gym = new Gym();
         }
         [Test]
-        public async Task AddValidPokemon()
+        public async Task GetValidPokemon()
         {
             Pokemon p = new Pokemon();
-            string Error = await PokeApi.ApplyPokemonAPIInfo("1", p);
-            Console.WriteLine(p.Name);
-            Assert.That(p.SpriteFront, Is.Not.Null);
+            string Error;
+            (p, Error) = await PokeApi.GetPokemonAPIInfo("1");
+            Assert.That(p, Is.Not.Null);
             Assert.That(Error, Is.Empty);
         }
         [Test]
-        public async Task AddInvalidPokemon()
+        public async Task GetInvalidPokemon()
         {
             Pokemon p = new Pokemon();
-            string Error = await PokeApi.ApplyPokemonAPIInfo("0", p);
-            Console.WriteLine(p.Name);
-            Assert.That(p.SpriteFront, Is.Null);
+            string Error;
+            (p, Error) = await PokeApi.GetPokemonAPIInfo("0");
+            Assert.That(p, Is.Null);
             Assert.That(Error, Is.Not.Empty);
+        }
+        [Test]
+        public async Task AddPokemonFromAPIToDB()
+        {
+            Pokemon p = new Pokemon();
+            string Error;
+            (p, Error) = await PokeApi.GetPokemonAPIInfo("1");
+            DBManager.AddPokemon(p);
+            Assert.That(p.Id, Is.EqualTo(DBManager.GetPokemon("1").Id));
         }
     }
 }

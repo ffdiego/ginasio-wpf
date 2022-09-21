@@ -11,20 +11,24 @@ namespace TestProject1
     class GymTests
     {
         private Gym gym;
-        Trainer trainer1 = new()
-        {
-            Name = "Diego"
-        };
-        private readonly Pokemon pokemon1 = new()
-        {
-            Id = 1,
-            Name = "Bulbasaur",
-            Type = "Grass",
-            SpriteFront = new MemoryStream(new byte()),
-            SpriteBack = new MemoryStream(new byte())
-        };
+        Trainer trainer1;
+        private readonly Pokemon pokemon1;
+        string name1;
         public GymTests()
         {
+            trainer1 = new()
+            {
+                Name = "Diego"
+            };
+            pokemon1 = new()
+            {
+                Id = 1,
+                Name = "Bulbasaur",
+                Type = "Grass",
+                SpriteFront = new MemoryStream(new byte()),
+                SpriteBack = new MemoryStream(new byte())
+            };
+            name1 = "Bruno";
             DBManager.SetDB(DBType.PostGRES);
             DBManager.ResetTables();
             gym = new Gym();
@@ -54,6 +58,11 @@ namespace TestProject1
         {
             trainer1.DetachPokemon(pokemon1);
             Assert.That(trainer1.Pokemons.Count(), Is.EqualTo(0));
+        }
+        [Test]
+        public void UpdateTrainer()
+        {
+
         }
     }
 }
