@@ -9,7 +9,7 @@ namespace TestProject1
         Gym gym;
         public PokeAPITests()
         {
-            DBManager.SetDB(new PGSQLdb());
+            DBManager.SetDB(new PGSQLdb("test"));
             DBManager.ResetTables();
             gym = new Gym();
         }

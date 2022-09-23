@@ -12,12 +12,18 @@ namespace WpfApp1
     public static class PokeApi
     {
         private static readonly HttpClient client = new HttpClient();
+        //todo: Pergunta: Isso deve existir?
+        public static int ApiTimesCalled;
         public static async Task<(Pokemon, string)> GetPokemonAPIInfo(string nameOrNumber)
         {
             try
             {
                 Pokemon result = DBManager.GetPokemon(nameOrNumber);
-                if (result == null) result = await getPokemonInfo(nameOrNumber);
+                if (result == null)
+                { 
+                    ApiTimesCalled++;
+                    result = await getPokemonInfo(nameOrNumber);
+                }
                 return (result, "");
             }
             catch (Exception e)

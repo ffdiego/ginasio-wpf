@@ -28,7 +28,7 @@ namespace TestProject1
                 SpriteBack = new MemoryStream(new byte())
             };
 
-            DBManager.SetDB(new PGSQLdb());
+            DBManager.SetDB(new PGSQLdb("test"));
             DBManager.ResetTables();
             gym = new Gym();
         }

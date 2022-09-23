@@ -16,6 +16,10 @@ namespace WpfApp1
         {
             connectionString = "Host=127.0.0.1;Username=postgres;Password=docker";
         }
+        public PGSQLdb(string db)
+        {
+            connectionString = $"Host=127.0.0.1;Username=postgres;Password=docker;Database={db}";
+        }
         public void ResetTables()
         {
             Connect();
@@ -306,7 +310,7 @@ namespace WpfApp1
                 {
                     cmd = new NpgsqlCommand(@"SELECT pokemon.id, name, type, sprite_front, sprite_back FROM pokemon
                                           WHERE LOWER(name) = @name", connection);
-                    cmd.Parameters.AddWithValue("name", nameOrId);
+                    cmd.Parameters.AddWithValue("name", nameOrId.ToLower());
                 }
 
                 reader = cmd.ExecuteReader();

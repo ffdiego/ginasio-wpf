@@ -39,7 +39,6 @@ namespace TestProject1
             mockedDB.Setup(x => x.GetAllTrainers()).Returns(trainers);
 
             DBManager.SetDB(mockedDB.Object);
-            DBManager.ResetTables();
             gym = new Gym();
         }
 

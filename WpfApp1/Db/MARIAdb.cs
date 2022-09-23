@@ -22,10 +22,15 @@ namespace WpfApp1
         {
             connectionString = $"Server=127.0.0.1;Port=8000;User ID=root;Password=my-secret-pw;Database={db}";
         }
+        public void ResetTables()
+        {
+            Connect();
+            _dropTables();
+            _createTables();
+            Disconnect();
+        }
         public List<Trainer> GetAllTrainers()
         {
-            Dictionary<string, double> FDados = new Dictionary<string, double>();
-            
             try
             {
                 Connect();
@@ -37,38 +42,30 @@ namespace WpfApp1
                 Disconnect();
                 return result;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
-        public Pokemon GetPokemon(Pokemon pokemon)
+        public Pokemon SearchPokemon(string name)
         {
-            try
-            {
-                Connect();
-                Pokemon result = _searchPokemon(pokemon);
-                Disconnect();
-                return result;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            Connect();
+            Pokemon pokemon = _getPokemon(name);
+            Disconnect();
+            return pokemon;
         }
-
         public void InsertPokemon(Pokemon pokemon)
         {
             try
             {
                 Connect();
-                _createPokemon(pokemon);
+                if (_pokemonExistsInDb(pokemon) == false)
+                    _createPokemon(pokemon);
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                MessageBox.Show(e.Message);
-                throw e;
+                throw;
             }
         }
 
@@ -80,16 +77,16 @@ namespace WpfApp1
                 _createTrainer(trainer);
                 foreach (Pokemon pokemon in trainer.Pokemons)
                 {
-                    if (_searchPokemon(pokemon) == null)
+                    if (_pokemonExistsInDb(pokemon) == false)
                         _createPokemon(pokemon);
                     _attachPokemon(trainer, pokemon);
                 }
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
-                throw e;
+                throw;
             }
         }
 
@@ -101,10 +98,10 @@ namespace WpfApp1
                 _deleteTrainer(trainer);
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
-                throw e;
+                throw;
             }
         }
         public void DetachPokemon(Trainer trainer, Pokemon pokemon)
@@ -115,9 +112,9 @@ namespace WpfApp1
                 _detachPokemon(trainer, pokemon);
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
         public void AttachPokemon(Trainer trainer, Pokemon pokemon)
@@ -128,9 +125,9 @@ namespace WpfApp1
                 _attachPokemon(trainer, pokemon);
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -143,9 +140,9 @@ namespace WpfApp1
                 t.SetPokemons(_readPokemonsOf(t.Id));
                 Disconnect();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
         private List<Trainer> _readTrainers()
@@ -166,9 +163,9 @@ namespace WpfApp1
                 }
                 return list;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -187,9 +184,9 @@ namespace WpfApp1
                 reader.Read();
                 trainer.Id = reader.GetInt16(0);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -205,13 +202,13 @@ namespace WpfApp1
                 cmd.Parameters.AddWithValue("i", pokemon.Id);
                 cmd.Parameters.AddWithValue("n", pokemon.Name);
                 cmd.Parameters.AddWithValue("t", pokemon.Type);
-                cmd.Parameters.AddWithValue("f", pokemon.SpriteFront);
-                cmd.Parameters.AddWithValue("b", pokemon.SpriteBack);
+                cmd.Parameters.AddWithValue("f", Convert.ToBase64String(pokemon.SpriteFront.ToArray()));
+                cmd.Parameters.AddWithValue("b", Convert.ToBase64String(pokemon.SpriteBack.ToArray()));
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -228,9 +225,9 @@ namespace WpfApp1
                 cmd.Parameters.AddWithValue("p", pokemon.Id);
                 reader = cmd.ExecuteReader();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -240,37 +237,31 @@ namespace WpfApp1
             return result;
         }
         // Read
-        private Pokemon _searchPokemon(Pokemon pokemon)
+        private bool _pokemonExistsInDb(Pokemon pokemon)
         {
-            Pokemon result = null;
+            bool result = false;
             try
             {
-                cmd = new MySqlCommand("SELECT id, name, type, sprite_front, sprite_back FROM pokemon WHERE name = @i LIMIT 1", connection);
-                cmd.Parameters.AddWithValue("id", pokemon.Id);
+                cmd = new MySqlCommand("SELECT id FROM pokemon WHERE id = @i LIMIT 1", connection);
+                cmd.Parameters.AddWithValue("i", pokemon.Id);
                 reader = cmd.ExecuteReader();
                 if (reader.HasRows)
                 {
                     while (reader.Read())
-                        result = new Pokemon()
-                        {
-                            Id = reader.GetInt32(0),
-                            Name = reader.GetString(1),
-                            Type = reader.GetString(2),
-                            SpriteFront = new MemoryStream(Convert.FromBase64String(reader.GetString(3))),
-                            SpriteBack = new MemoryStream(Convert.FromBase64String(reader.GetString(4)))
-                        };
+                        result = true;
                 }
+                return result;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
                 cmd.Dispose();
                 reader.Dispose();
             }
-            return result;
+
         }
         private List<Pokemon> _readPokemonsOf(int id)
         {
@@ -297,9 +288,52 @@ namespace WpfApp1
                 }
                 return result;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
+            }
+            finally
+            {
+                cmd.Dispose();
+                reader.Dispose();
+            }
+        }
+        private Pokemon _getPokemon(string nameOrId)
+        {
+            Pokemon result = new Pokemon();
+            int id;
+            try
+            {
+                if (int.TryParse(nameOrId, out id))
+                {
+                    cmd = new MySqlCommand(@"SELECT pokemon.id, name, type, sprite_front, sprite_back FROM pokemon
+                                          WHERE id = @id", connection);
+                    cmd.Parameters.AddWithValue("id", id);
+                }
+                else
+                {
+                    cmd = new MySqlCommand(@"SELECT pokemon.id, name, type, sprite_front, sprite_back FROM pokemon
+                                          WHERE LOWER(name) = @name", connection);
+                    cmd.Parameters.AddWithValue("name", nameOrId.ToLower());
+                }
+
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    result = new Pokemon()
+                    {
+                        Id = reader.GetInt32(0),
+                        Name = reader.GetString(1),
+                        Type = reader.GetString(2),
+                        SpriteFront = new MemoryStream(Convert.FromBase64String(reader.GetString(3))),
+                        SpriteBack = new MemoryStream(Convert.FromBase64String(reader.GetString(4)))
+                    };
+                }
+                return (result.Id != 0) ? result : null;
+            }
+            catch (Exception)
+            {
+                throw;
             }
             finally
             {
@@ -319,10 +353,9 @@ namespace WpfApp1
                 cmd.Parameters.AddWithValue("i", t.Id);
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                MessageBox.Show(e.Message);
-                throw e;
+                throw;
             }
             finally
             {
@@ -338,9 +371,9 @@ namespace WpfApp1
                 cmd.Parameters.AddWithValue("i", trainer.Id);
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
@@ -357,14 +390,64 @@ namespace WpfApp1
                 cmd.Parameters.AddWithValue("p", pokemon.Id);
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
                 cmd.Dispose();
                 reader.Dispose();
+            }
+        }
+        private void _dropTables()
+        {
+            try
+            {
+                cmd = new MySqlCommand(@"  DROP TABLE IF EXISTS trainers2pokemons;
+                                            DROP TABLE IF EXISTS ginasio;
+                                            DROP TABLE IF EXISTS pokemon;", connection);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                cmd.Dispose();
+            }
+        }
+        private void _createTables()
+        {
+            try
+            {
+                cmd = new MySqlCommand(@"
+                        CREATE TABLE ginasio (
+                            id SERIAL NOT NULL PRIMARY KEY,
+                            name VARCHAR(255) NOT NULL
+                        );
+                        CREATE TABLE pokemon (
+                            id SERIAL NOT NULL PRIMARY KEY,
+                            name VARCHAR(255) NOT NULL,
+                            type VARCHAR(255) NOT NULL,
+                            sprite_front TEXT NOT NULL,
+                            sprite_back TEXT NOT NULL
+                        );
+                        CREATE TABLE trainers2pokemons (
+                            id serial NOT NULL PRIMARY KEY,
+                            trainer_id SERIAL REFERENCES ginasio(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                            pokemon_id SERIAL REFERENCES pokemon(id) ON DELETE CASCADE ON UPDATE CASCADE
+                        );", connection);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                cmd.Dispose();
             }
         }
         private void Connect()
@@ -375,27 +458,17 @@ namespace WpfApp1
                 connection.Open();
                 if (connection.State == System.Data.ConnectionState.Open)
                 {
-                    Console.WriteLine("Success open postgreSQL connection");
+                    Console.WriteLine("Success: PostgreSQL connection opened");
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
         private void Disconnect()
         {
             connection.Close();
-        }
-
-        public void ResetTables()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Pokemon SearchPokemon(string nameOrId)
-        {
-            throw new NotImplementedException();
         }
     }
 }
