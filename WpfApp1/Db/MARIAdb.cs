@@ -16,7 +16,7 @@ namespace WpfApp1
         MySqlDataReader reader;
         public MARIAdb()
         {
-            connectionString = "Server=127.0.0.1;Port=8000;User ID=root;Password=my-secret-pw;Database=test";
+            connectionString = "Server=127.0.0.1;Port=8000;User ID=root;Password=my-secret-pw;Database=public";
         }
         public MARIAdb(string db)
         {
@@ -431,13 +431,13 @@ namespace WpfApp1
                             id SERIAL NOT NULL PRIMARY KEY,
                             name VARCHAR(255) NOT NULL,
                             type VARCHAR(255) NOT NULL,
-                            sprite_front TEXT NOT NULL,
-                            sprite_back TEXT NOT NULL
+                            sprite_front MEDIUMTEXT NOT NULL,
+                            sprite_back MEDIUMTEXT NOT NULL
                         );
                         CREATE TABLE trainers2pokemons (
-                            id serial NOT NULL PRIMARY KEY,
-                            trainer_id SERIAL REFERENCES ginasio(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            pokemon_id SERIAL REFERENCES pokemon(id) ON DELETE CASCADE ON UPDATE CASCADE
+                          id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+                          trainer_id BIGINT UNSIGNED REFERENCES ginasio(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                          pokemon_id BIGINT UNSIGNED REFERENCES pokemon(id) ON DELETE CASCADE ON UPDATE CASCADE
                         );", connection);
                 cmd.ExecuteNonQuery();
             }
