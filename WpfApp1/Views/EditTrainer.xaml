@@ -10,7 +10,7 @@
         <StackPanel Margin="10" HorizontalAlignment="Left" Width="200">
             <TextBlock>Nome:</TextBlock>
             <TextBox Text="{Binding Treinador.Name}" Height="25" VerticalContentAlignment="Center" />
-            <Button Click="SaveBtn" Margin="10, 20, 10, 0" Height="25">Salvar</Button>
+            <Button Click="SaveBtn" IsDefault="True" Margin="10, 20, 10, 0" Height="25">Salvar</Button>
         </StackPanel>
         <GroupBox Width="200" Padding="10" Margin="228,0,10,10">
             <GroupBox.Header>

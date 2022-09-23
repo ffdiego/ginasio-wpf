@@ -12,8 +12,8 @@
 
             <TextBlock>Nome / Número:</TextBlock>
             <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding Name}" Height="25" Width="170" VerticalContentAlignment="Center" />
-                <Button Command="{Binding Fetch}" Width="30">OK</Button>
+                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="25" Width="170" VerticalContentAlignment="Center" />
+                <Button Command="{Binding Fetch}" IsDefault="True" Width="30">OK</Button>
             </StackPanel>
             <TextBlock Margin="0,0,0,25" Foreground="Red" Text="{Binding ErrorMSG}" TextWrapping="Wrap"></TextBlock>
             <TextBlock>Nome:</TextBlock>
